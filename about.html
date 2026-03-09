@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Escapes | About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+
+    <header role="banner" class="bg-blue-800 text-white p-4 md:px-8 flex justify-between items-center">
+        <div class="text-2xl font-bold">Budget Escapes</div>
+        <nav role="navigation" aria-label="Main Navigation">
+            <ul class="nav-links hidden md:flex gap-6 m-0 p-0 list-none">
+                <li><a href="index.html" class="hover:text-red-300 transition-colors">Home</a></li>
+                <li><a href="destinations.html" class="hover:text-red-300 transition-colors">Destinations</a></li>
+                <li><a href="book.html" class="hover:text-red-300 transition-colors">Book a Trip</a></li>
+                <li><a href="about.html" aria-current="page" class="text-red-400 font-bold underline">About Us</a></li>
+                <li><a href="contact.html" class="hover:text-red-300 transition-colors">Contact</a></li>
+            </ul>
+            <button class="menu-toggle md:hidden text-white text-2xl" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow p-6 md:p-12 max-w-5xl mx-auto w-full">
+        <section class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-blue-900 mb-4">About Our Team</h1>
+            <p class="text-gray-700">We are a group of university students passionate about exploring the world without emptying our wallets.</p>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded shadow border border-gray-200 text-center">
+                <img src="https://via.placeholder.com/150" alt="Portrait of Student 1, Lead Designer" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-gray-100">
+                <h3 class="text-xl font-bold text-blue-900">[Student 1 Name]</h3>
+                <p class="text-red-500 font-bold mb-2">Lead Designer</p>
+                <p class="text-gray-600 text-sm">Loves finding the best aesthetic cafes and hidden city art.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded shadow border border-gray-200 text-center">
+                <img src="https://via.placeholder.com/150" alt="Portrait of Student 2, Lead Developer" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-gray-100">
+                <h3 class="text-xl font-bold text-blue-900">[Student 2 Name]</h3>
+                <p class="text-red-500 font-bold mb-2">Lead Developer</p>
+                <p class="text-gray-600 text-sm">Nature enthusiast always looking for the toughest hiking trails.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded shadow border border-gray-200 text-center">
+                <img src="https://via.placeholder.com/150" alt="Portrait of Student 3, Content Manager" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-gray-100">
+                <h3 class="text-xl font-bold text-blue-900">[Student 3 Name]</h3>
+                <p class="text-red-500 font-bold mb-2">Content Manager</p>
+                <p class="text-gray-600 text-sm">The ultimate budget planner. Finds the cheapest bus tickets.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo" class="bg-blue-900 text-white text-center p-6 mt-auto">
+        <p>© 2026 Student Budget Escapes. Designed by Ivan, Mariana, Rodrigo.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

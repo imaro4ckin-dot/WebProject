@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Escapes | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+
+    <header role="banner" class="bg-blue-800 text-white p-4 md:px-8 flex justify-between items-center">
+        <div class="text-2xl font-bold">Budget Escapes</div>
+
+        <nav role="navigation" aria-label="Main Navigation">
+            <ul class="nav-links hidden md:flex gap-6 m-0 p-0 list-none">
+                <li><a href="index.html" aria-current="page" class="text-red-400 font-bold underline">Home</a></li>
+                <li><a href="destinations.html" class="hover:text-red-300 transition-colors">Destinations</a></li>
+                <li><a href="book.html" class="hover:text-red-300 transition-colors">Book a Trip</a></li>
+                <li><a href="about.html" class="hover:text-red-300 transition-colors">About Us</a></li>
+                <li><a href="contact.html" class="hover:text-red-300 transition-colors">Contact</a></li>
+            </ul>
+            <button class="menu-toggle md:hidden text-white text-2xl" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow">
+        <section class="bg-blue-100 text-center py-16 px-4 border-b border-gray-300">
+            <h1 class="text-4xl font-bold text-blue-900 mb-4">Discover Local Hidden Gems</h1>
+            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Affordable, unforgettable weekend escapes for students on a budget.</p>
+            <a href="destinations.html" class="inline-block bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded shadow transition-colors">
+                Explore Trips
+            </a>
+        </section>
+
+        <section class="p-8 max-w-5xl mx-auto">
+            <h2 class="text-2xl font-bold text-center text-blue-900 mb-8">Recent Travel Posts</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <article class="bg-white rounded shadow border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <img src="Media/1PHr01.webp" alt="A scenic bicycle hiking trail outside the city" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">Bicycle hiking in outside of city</h3>
+                        <p class="text-gray-600 mb-4">Read our latest guide on packing cheap snacks and finding free viewpoints.</p>
+                        <a href="destinations.html" aria-label="Read more about Bicycle hiking" class="text-red-500 font-bold hover:underline">Read More →</a>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded shadow border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <img src="Media/hl_hd_1452a.webp" alt="The exterior of a vintage downtown cafe" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">Downtown Thrift & Coffee</h3>
+                        <p class="text-gray-600 mb-4">We found the best student-discount cafes in the city center.</p>
+                        <a href="Media/destinations.html" aria-label="Read more about Downtown Thrift & Coffee" class="text-red-500 font-bold hover:underline">Read More →</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo" class="bg-blue-900 text-white text-center p-6 mt-auto">
+        <p>© 2026 Student Budget Escapes. Designed by Ivan, Mariana, Rodrigo.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

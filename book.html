@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Escapes | Book</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+
+    <header role="banner" class="bg-blue-800 text-white p-4 md:px-8 flex justify-between items-center">
+        <div class="text-2xl font-bold">Budget Escapes</div>
+        <nav role="navigation" aria-label="Main Navigation">
+            <ul class="nav-links hidden md:flex gap-6 m-0 p-0 list-none">
+                <li><a href="index.html" class="hover:text-red-300 transition-colors">Home</a></li>
+                <li><a href="destinations.html" class="hover:text-red-300 transition-colors">Destinations</a></li>
+                <li><a href="book.html" aria-current="page" class="text-red-400 font-bold underline">Book a Trip</a></li>
+                <li><a href="about.html" class="hover:text-red-300 transition-colors">About Us</a></li>
+                <li><a href="contact.html" class="hover:text-red-300 transition-colors">Contact</a></li>
+            </ul>
+            <button class="menu-toggle md:hidden text-white text-2xl" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow p-6 md:p-12 max-w-3xl mx-auto w-full">
+        <section class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-blue-900 mb-2">Book Your Escape</h1>
+            <p class="text-gray-700">Reserve your spot on one of our upcoming group student trips!</p>
+        </section>
+
+        <section class="bg-white p-8 rounded shadow border border-gray-200">
+            <form id="contactForm" class="flex flex-col gap-4">
+
+                <div class="flex flex-col">
+                    <label for="bookName" class="font-bold text-blue-900 mb-1">Full Name:</label>
+                    <input type="text" id="bookName" name="bookName" required aria-required="true" placeholder="John Doe" class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none">
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="studentId" class="font-bold text-blue-900 mb-1">Student ID:</label>
+                    <input type="text" id="studentId" name="studentId" required aria-required="true" placeholder="123456" class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none">
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="destination" class="font-bold text-blue-900 mb-1">Choose Destination:</label>
+                    <select id="destination" name="destination" required aria-required="true" class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none bg-white">
+                        <option value="" disabled selected>Select a trip...</option>
+                        <option value="pine-valley">Heidelberg Hike ($20)</option>
+                        <option value="city-tour">Coffee Tour ($15)</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="travelDate" class="font-bold text-blue-900 mb-1">Select Date:</label>
+                    <input type="date" id="travelDate" name="travelDate" required aria-required="true" class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none">
+                </div>
+
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded mt-4 transition-colors">Confirm Booking Request</button>
+            </form>
+
+            <div id="successMessage" hidden aria-live="polite" class="text-center p-6 bg-green-100 border border-green-300 rounded mt-4">
+                <h3 class="text-lg font-bold text-green-800 mb-2">Booking Received!</h3>
+                <p class="text-green-700">Check your student email for the payment link.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo" class="bg-blue-900 text-white text-center p-6 mt-auto">
+        <p>© 2026 Student Budget Escapes. Designed by Ivan, Mariana, Rodrigo.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

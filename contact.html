@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Escapes | Contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+
+    <header role="banner" class="bg-blue-800 text-white p-4 md:px-8 flex justify-between items-center">
+        <div class="text-2xl font-bold">Budget Escapes</div>
+        <nav role="navigation" aria-label="Main Navigation">
+            <ul class="nav-links hidden md:flex gap-6 m-0 p-0 list-none">
+                <li><a href="index.html" class="hover:text-red-300 transition-colors">Home</a></li>
+                <li><a href="destinations.html" class="hover:text-red-300 transition-colors">Destinations</a></li>
+                <li><a href="book.html" class="hover:text-red-300 transition-colors">Book a Trip</a></li>
+                <li><a href="about.html" class="hover:text-red-300 transition-colors">About Us</a></li>
+                <li><a href="contact.html" aria-current="page" class="text-red-400 font-bold underline">Contact</a></li>
+            </ul>
+            <button class="menu-toggle md:hidden text-white text-2xl" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow p-6 md:p-12 max-w-5xl mx-auto w-full">
+        <section class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-blue-900 mb-2">Get in Touch</h1>
+            <p class="text-gray-700">Have a hidden gem to recommend? Drop us a line!</p>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 bg-white p-8 rounded shadow border border-gray-200">
+
+            <div class="md:col-span-1 border-b md:border-b-0 md:border-r border-gray-200 pb-6 md:pb-0 md:pr-6">
+                <h2 class="text-xl font-bold text-blue-900 mb-4">Contact Info</h2>
+                <p class="text-gray-700 mb-2"><strong>Email:</strong> hello@budgetescapes.edu</p>
+                <p class="text-gray-700 mb-2"><strong>Phone:</strong> +49 123 456 7890</p>
+                <p class="text-gray-700"><strong>Office:</strong> Student Union Building</p>
+            </div>
+
+            <div class="md:col-span-2">
+                <form id="contactForm" class="flex flex-col gap-4">
+                    <div class="flex flex-col">
+                        <label for="userName" class="font-bold text-blue-900 mb-1">Full Name:</label>
+                        <input type="text" id="userName" name="userName" required aria-required="true" placeholder="Jane Doe" class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none">
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label for="userEmail" class="font-bold text-blue-900 mb-1">Email Address:</label>
+                        <input type="email" id="userEmail" name="userEmail" required aria-required="true" placeholder="jane@example.com" class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none">
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label for="userMessage" class="font-bold text-blue-900 mb-1">Message:</label>
+                        <textarea id="userMessage" name="userMessage" rows="4" required aria-required="true" placeholder="Your message..." class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded w-full md:w-auto self-start transition-colors">Send Message</button>
+                </form>
+
+                <div id="successMessage" hidden aria-live="polite" class="text-center p-4 bg-green-100 border border-green-300 rounded mt-4">
+                    <h3 class="text-lg font-bold text-green-800">Thank you!</h3>
+                    <p class="text-green-700">Your message has been sent.</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer role="contentinfo" class="bg-blue-900 text-white text-center p-6 mt-auto">
+        <p>© 2026 Student Budget Escapes. Designed by Ivan, Mariana, Rodrigo.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
