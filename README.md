@@ -5,7 +5,7 @@
 This project was developed as the final showcase for the **Web Engineering 1** course.
 
 ## 🎯 Purpose of the Project
-Our client is a local university travel club (acting as a local tourism board) that needs a dedicated platform to share budget-friendly travel experiences and recommendations with fellow students[cite: 22, 23]. 
+Our client is a local university travel club (acting as a local tourism board) that needs a dedicated platform to share budget-friendly travel experiences and recommendations with fellow students. 
 
 The goal of this website is to provide an easy-to-navigate, visually appealing space where users can explore local hidden gems, filter trips based on their interests (Nature vs. City), view photo galleries, and book upcoming group trips.
 
@@ -24,7 +24,7 @@ We built this project adhering to modern web development best practices:
 **Extra Features:** We utilized CSS transitions, hover effects, and layout transformations to create a modern, engaging user experience.
 
 ## 💻 Technologies Used
-As per the project requirements, no Content Management Systems (CMS) were used[cite: 54]. 
+As per the project requirements, no Content Management Systems (CMS) were used. 
 * **HTML5:** For page structure and semantics.
 **Tailwind CSS (via CDN):** Used as our external CSS framework to handle UI guidelines, typography, and responsive grid/flexbox layouts.
 * **Vanilla JavaScript:** For DOM manipulation and handling user interactions.
