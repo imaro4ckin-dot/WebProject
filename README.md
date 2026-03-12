@@ -9,10 +9,6 @@ Our client is a local university travel club (acting as a local tourism board) t
 
 The goal of this website is to provide an easy-to-navigate, visually appealing space where users can explore local hidden gems, filter trips based on their interests (Nature vs. City), view photo galleries, and book upcoming group trips.
 
-## 👥 Team Members
-Mariana - Lead Designer (UI/UX, Wireframing, CSS Styling)
-Ivan - Lead Developer (HTML Structure, JavaScript Functionality, Accessibility)
-Rodrigo - Content Manager (Copywriting, Asset Gathering, Testing)
 
 ## 🚀 Features & Implementation
 We built this project adhering to modern web development best practices:
