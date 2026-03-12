@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Escapes | Downtown Thrift & Coffee</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+
+    <header role="banner" class="bg-blue-800 text-white p-4 md:px-8 flex justify-between items-center">
+        <div class="text-2xl font-bold">Budget Escapes</div>
+
+        <nav role="navigation" aria-label="Main Navigation">
+            <ul class="nav-links hidden md:flex gap-6 m-0 p-0 list-none">
+                <li><a href="index.html" class="hover:text-red-300 transition-colors">Home</a></li>
+                <li><a href="destinations.html" class="hover:text-red-300 transition-colors">Destinations</a></li>
+                <li><a href="book.html" class="hover:text-red-300 transition-colors">Book a Trip</a></li>
+                <li><a href="about.html" class="hover:text-red-300 transition-colors">About Us</a></li>
+                <li><a href="contact.html" class="hover:text-red-300 transition-colors">Contact</a></li>
+            </ul>
+            <button class="menu-toggle md:hidden text-white text-2xl" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow p-6 md:p-12 max-w-4xl mx-auto w-full">
+
+        <a href="index.html" aria-label="Go back to home page" class="text-blue-800 hover:text-red-500 transition-colors mb-6 inline-block font-bold">
+            ← Back to Recent Posts
+        </a>
+
+        <article class="bg-white p-6 md:p-10 rounded shadow border border-gray-200">
+
+            <header class="mb-8 border-b border-gray-200 pb-6">
+                <h1 class="text-4xl font-bold text-blue-900 mb-4">Downtown Thrift & Coffee</h1>
+                <div class="flex flex-wrap gap-4 text-gray-600 text-sm">
+                    <span class="font-bold text-red-500">By [Student 1 Name]</span>
+                    <span>|</span>
+                    <span>Published: October 18, 2026</span>
+                    <span>|</span>
+                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-bold">City</span>
+                </div>
+            </header>
+
+            <img src="Media/hl_hd_1452a.webp" alt="The cozy exterior of a vintage downtown cafe with outdoor seating" class="w-full h-64 md:h-96 object-cover rounded mb-8 shadow-sm">
+
+            <div class="text-gray-700 leading-relaxed space-y-6 text-lg">
+                <p>
+                    Sometimes you just need a break from studying, but you don't want to spend your entire weekly allowance on a single latte. We spent Saturday exploring the city center to find the best spots that actually offer student discounts.
+                </p>
+
+                <h2 class="text-2xl font-bold text-blue-800 mt-8 mb-4">The Vintage Cafe Find</h2>
+                <p>
+                    Tucked away just two streets behind the main shopping district, we stumbled upon a fantastic little cafe. If you show your student ID at the register, you get 15% off all hot drinks! The Wi-Fi is fast, and the vintage armchairs make it the perfect spot to read a book or catch up on assignments.
+                </p>
+
+                <h2 class="text-2xl font-bold text-blue-800 mt-8 mb-4">Our Budget Breakdown</h2>
+                <p>Here is exactly what we spent for an afternoon in the city:</p>
+                <ul class="list-disc pl-8 space-y-2">
+                    <li><strong>Transport:</strong> €0.00 (We used our semester transit passes)</li>
+                    <li><strong>Large Cappuccino:</strong> €3.40 (With the student discount applied!)</li>
+                    <li><strong>Thrift Store Find:</strong> €6.00 (Found an amazing vintage denim jacket at the second-hand shop next door)</li>
+                </ul>
+
+                <div class="bg-blue-50 p-6 border-l-4 border-blue-800 mt-8 rounded-r">
+                    <p class="font-bold text-blue-900 text-xl mb-2">Pro Travel Tip:</p>
+                    <p>Always carry your physical student ID card! Many of these smaller local cafes don't advertise their discounts on the menu, so you always have to ask politely at the counter.</p>
+                </div>
+            </div>
+
+        </article>
+    </main>
+
+    <footer role="contentinfo" class="bg-blue-900 text-white text-center p-6 mt-auto">
+        <p>© 2026 Student Budget Escapes. Designed by [Your Team Names].</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
