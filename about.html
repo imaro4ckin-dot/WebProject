@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Budget Escapes | About Us</title>
     <script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		.card { animation: fadeInUp 0.5s ease forwards; }
+		.card:nth-child(2) { animation-delay: 0.2s; }
+		.card:nth-child(3) { animation-delay: 0.4s; }
+	</style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
 
@@ -29,22 +44,22 @@
         </section>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded shadow border border-gray-200 text-center">
+            <div class="card bg-white p-6 rounded shadow border border-gray-200 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
                 <img src="https://via.placeholder.com/150" alt="Portrait of Student 1, Lead Designer" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-gray-100">
                 <h3 class="text-xl font-bold text-blue-900">Mariana Naumenko</h3>
                 <p class="text-red-500 font-bold mb-2">Lead Designer</p>
                 <p class="text-gray-600 text-sm">Loves finding the best aesthetic cafes and hidden city art.</p>
             </div>
 
-            <div class="bg-white p-6 rounded shadow border border-gray-200 text-center">
+            <div class="card bg-white p-6 rounded shadow border border-gray-200 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
                 <img src="https://via.placeholder.com/150" alt="Portrait of Student 2, Lead Developer" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-gray-100">
                 <h3 class="text-xl font-bold text-blue-900">Ivan Marochkin</h3>
                 <p class="text-red-500 font-bold mb-2">Lead Developer</p>
                 <p class="text-gray-600 text-sm">Nature enthusiast always looking for the toughest hiking trails.</p>
             </div>
 
-            <div class="bg-white p-6 rounded shadow border border-gray-200 text-center">
-                <img src="https://via.placeholder.com/150" alt="Portrait of Student 3, Content Manager" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-gray-100">
+            <div class="card bg-white p-6 rounded shadow border border-gray-200 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
+                <img src="Media/IMG_3396.HEIC" alt="Portrait of Rodrigo, Content Manager" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-gray-100 object-cover">§
                 <h3 class="text-xl font-bold text-blue-900">Rodrigo Chavez</h3>
                 <p class="text-red-500 font-bold mb-2">Content Manager</p>
                 <p class="text-gray-600 text-sm">The ultimate budget planner. Finds the cheapest bus tickets.</p>
