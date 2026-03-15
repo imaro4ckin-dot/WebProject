@@ -60,17 +60,17 @@ function handleVote(type) {
   const votes = loadVotes();
 
 //   The code below has been commented to allow a person to vote twice!!! 
-//   if (!alreadyVoted) {
+  if (!alreadyVoted) {
     if (type === 'like') votes.likes++;
     else votes.dislikes++;
     localStorage.setItem(POST_KEY, JSON.stringify(votes));
     localStorage.setItem(POST_KEY + "_voted", "true");
     document.getElementById('votedMsg').classList.remove('hidden');
-    // document.getElementById('likeBtn').disabled = true;
-    // document.getElementById('dislikeBtn').disabled = true;
-    // document.getElementById('likeBtn').classList.add('opacity-50', 'cursor-not-allowed');
-    // document.getElementById('dislikeBtn').classList.add('opacity-50', 'cursor-not-allowed');
-//   }
+    document.getElementById('likeBtn').disabled = true;
+    document.getElementById('dislikeBtn').disabled = true;
+    document.getElementById('likeBtn').classList.add('opacity-50', 'cursor-not-allowed');
+    document.getElementById('dislikeBtn').classList.add('opacity-50', 'cursor-not-allowed');
+  }
   updateUI(votes);
 }
 
