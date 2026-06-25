@@ -1,6 +1,9 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
+const passport = require('passport');
 require('dotenv').config();
+require('./config/passport')(passport);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +18,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Temporarily serve your HTML files directly from the "views" directory
 // (You will update this later when you transition to EJS templates)
 app.use(express.static(path.join(__dirname, 'views')));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true
+}));
+
+// Passport Middleware <-- ADD THIS BLOCK
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Import and mount your API routes
 const postRoutes = require('./routes/posts');

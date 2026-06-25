@@ -20,5 +20,27 @@ Content-Type: application/json
   "category": "City"
 }
 
+### Login User
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ivan@budgetescapes.edu",
+  "password": "securepassword123"
+}
+
 ### 3. Fetch All Posts (Your [] should now be full of data!)
 GET http://localhost:3000/api/posts
+
+
+### 1. Login to the Application
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ivan@budgetescapes.edu",
+  "password": "securepassword123"
+}
+
+### 2. Logout of the Application
+POST http://localhost:3000/api/auth/logout
