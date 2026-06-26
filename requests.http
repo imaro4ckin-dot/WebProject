@@ -1,4 +1,8 @@
-### 1. Create a User
+### ==========================================
+### 1. AUTHENTICATION ENDPOINTS
+### ==========================================
+
+### Register a New User
 POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
@@ -8,39 +12,64 @@ Content-Type: application/json
   "password": "securepassword123"
 }
 
-### 2. Create a Post (Make sure the user_id matches the ID generated from step 1)
+### Login User (Creates Session Cookie)
+### Run this before trying to Create, Update, or Delete a post!
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ivan@budgetescapes.edu",
+  "password": "securepassword123"
+}
+
+### Logout User (Destroys Session Cookie)
+POST http://localhost:3000/api/auth/logout
+
+
+### ==========================================
+### 2. POSTS (MAIN CONTENT) ENDPOINTS
+### ==========================================
+
+### Get All Posts (Public Route)
+GET http://localhost:3000/api/posts
+
+
+### Create a Post (Protected - Must be logged in)
 POST http://localhost:3000/api/posts
 Content-Type: application/json
 
 {
-  "user_id": 1,
   "title": "A Weekend in Berlin",
   "slug": "weekend-in-berlin",
   "content": "Found an amazing currywurst stand near the East Side Gallery.",
   "category": "City"
 }
 
-### Login User
-POST http://localhost:3000/api/auth/login
+
+### Update a Post (Protected - Must be logged in as the author)
+### NOTE: Change the '1' at the end of the URL to the actual ID of your post
+PUT http://localhost:3000/api/posts/14
 Content-Type: application/json
 
 {
-  "email": "ivan@budgetescapes.edu",
-  "password": "securepassword123"
+  "title": "An UPDATED Weekend in Berlin",
+  "slug": "updated-weekend-in-berlin",
+  "content": "The currywurst was even better on day two. Highly recommend walking along the river afterwards.",
+  "category": "City"
 }
 
-### 3. Fetch All Posts (Your [] should now be full of data!)
-GET http://localhost:3000/api/posts
 
+### Delete a Post (Protected - Must be logged in as the author)
+### NOTE: Change the '1' at the end of the URL to the actual ID of your post
+DELETE http://localhost:3000/api/posts/13
 
-### 1. Login to the Application
-POST http://localhost:3000/api/auth/login
+### Add a Comment
+POST http://localhost:3000/api/posts/15/comments
 Content-Type: application/json
 
 {
-  "email": "ivan@budgetescapes.edu",
-  "password": "securepassword123"
+  "body": "This is a fantastic travel guide!"
 }
 
-### 2. Logout of the Application
-POST http://localhost:3000/api/auth/logout
+### Toggle a Like
+POST http://localhost:3000/api/posts/15/like
