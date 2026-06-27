@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Escapes | <%= profileUser.username %>'s Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+
+<%- include('partials/header', { page: '' }) %>
+
+<main role="main" class="flex-grow p-6 md:p-12 max-w-4xl mx-auto w-full">
+
+    <section class="bg-white p-8 rounded shadow border border-gray-200 mb-8 flex flex-col md:flex-row gap-8 items-start">
+        <img src="/Media/<%= profileUser.profile_pic %>"
+             alt="Profile picture of <%= profileUser.username %>"
+             class="w-32 h-32 rounded-full object-cover border-4 border-blue-100 shrink-0">
+
+        <div class="flex-1">
+            <h1 class="text-3xl font-bold text-blue-900 mb-1"><%= profileUser.username %></h1>
+            <p class="text-gray-500 text-sm mb-3">Member since <%= new Date(profileUser.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) %></p>
+            <p class="text-gray-700 leading-relaxed">
+                <%= profileUser.bio || 'No bio yet.' %>
+            </p>
+
+            <% if (user && user.id === profileUser.id) { %>
+                <button id="editProfileBtn" class="mt-4 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded transition-colors text-sm">
+                    Edit Profile
+                </button>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Edit profile form (hidden by default, only shown to the owner) -->
+    <% if (user && user.id === profileUser.id) { %>
+    <section id="editProfileForm" class="hidden bg-white p-8 rounded shadow border border-gray-200 mb-8">
+        <h2 class="text-xl font-bold text-blue-900 mb-4">Edit Your Profile</h2>
+        <form id="profileForm" enctype="multipart/form-data" class="flex flex-col gap-4">
+            <div class="flex flex-col">
+                <label for="bio" class="font-bold text-blue-900 mb-1">Bio:</label>
+                <textarea id="bio" name="bio" rows="3"
+                    placeholder="Tell the community about yourself..."
+                    class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none"><%= profileUser.bio || '' %></textarea>
+            </div>
+            <div class="flex flex-col">
+                <label for="profile_pic" class="font-bold text-blue-900 mb-1">Profile Picture:</label>
+                <input type="file" id="profile_pic" name="profile_pic" accept="image/*"
+                    class="p-2 border border-gray-300 rounded">
+            </div>
+            <div class="flex gap-3">
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition-colors">Save Changes</button>
+                <button type="button" id="cancelEditBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-6 rounded transition-colors">Cancel</button>
+            </div>
+            <p id="profileMsg" class="text-green-700 font-bold hidden"></p>
+        </form>
+    </section>
+    <% } %>
+
+    <!-- User's posts -->
+    <section>
+        <h2 class="text-2xl font-bold text-blue-900 mb-6">Posts by <%= profileUser.username %> (<%= posts.length %>)</h2>
+
+        <% if (posts.length === 0) { %>
+            <p class="text-gray-500">No posts published yet.</p>
+        <% } else { %>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <% posts.forEach(function(post) { %>
+                    <div class="bg-white rounded shadow border border-gray-200 overflow-hidden flex flex-col hover:-translate-y-1 transition-transform hover:shadow-lg">
+                        <% if (post.image) { %>
+                            <img src="/Media/<%= post.image %>" alt="<%= post.title %>" class="w-full h-40 object-cover">
+                        <% } else { %>
+                            <div class="w-full h-40 bg-blue-100 flex items-center justify-center text-blue-300 text-4xl">✈</div>
+                        <% } %>
+                        <div class="p-4 flex flex-col flex-grow">
+                            <span class="text-xs font-bold uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded mb-2 self-start"><%= post.category %></span>
+                            <h3 class="font-bold text-blue-900 mb-2 flex-grow"><%= post.title %></h3>
+                            <div class="flex gap-3 items-center">
+                                <a href="/posts/<%= post.id %>" class="text-red-500 font-bold hover:underline text-sm">Read &rarr;</a>
+                                <% if (user && user.id === profileUser.id) { %>
+                                    <button onclick="deletePost(<%= post.id %>)" class="text-gray-400 hover:text-red-500 text-sm transition-colors ml-auto">Delete</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </section>
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+    // Toggle edit form
+    const editBtn = document.getElementById('editProfileBtn');
+    const editForm = document.getElementById('editProfileForm');
+    const cancelBtn = document.getElementById('cancelEditBtn');
+
+    if (editBtn) editBtn.addEventListener('click', () => editForm.classList.toggle('hidden'));
+    if (cancelBtn) cancelBtn.addEventListener('click', () => editForm.classList.add('hidden'));
+
+    // Submit profile update
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(profileForm);
+            const res = await fetch('/api/users/<%= profileUser.id %>', {
+                method: 'PUT',
+                body: formData
+            });
+            const data = await res.json();
+            const msg = document.getElementById('profileMsg');
+            if (res.ok) {
+                msg.textContent = 'Profile updated! Refresh to see changes.';
+                msg.classList.remove('hidden');
+            } else {
+                msg.textContent = data.error || 'Update failed.';
+                msg.classList.remove('hidden', 'text-green-700');
+                msg.classList.add('text-red-600');
+            }
+        });
+    }
+
+    // Delete post
+    async function deletePost(postId) {
+        if (!confirm('Delete this post permanently?')) return;
+        const res = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
+        if (res.ok) window.location.reload();
+        else alert('Failed to delete post.');
+    }
+</script>
+<script src="/js/script.js"></script>
+</body>
+</html>

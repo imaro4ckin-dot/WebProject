@@ -57,5 +57,47 @@ const toggleLike = async (req, res) => {
     }
 };
 
+const getComments = async (req, res) => {
+    const postId = req.params.id;
+    try {
+        const [rows] = await db.query(
+            `SELECT comments.id, comments.body, comments.created_at,
+                    users.username, users.profile_pic
+             FROM comments
+             JOIN users ON comments.user_id = users.id
+             WHERE comments.post_id = ?
+             ORDER BY comments.created_at DESC`,
+            [postId]
+        );
+        res.json(rows);
+    } catch (error) {
+        console.error("Error fetching comments:", error.message);
+        res.status(500).json({ error: "Failed to fetch comments." });
+    }
+};
+
+const toggleBookmark = async (req, res) => {
+    const postId = req.params.id;
+    const userId = req.user.id;
+
+    try {
+        const [existing] = await db.query(
+            'SELECT * FROM bookmarks WHERE post_id = ? AND user_id = ?',
+            [postId, userId]
+        );
+
+        if (existing.length > 0) {
+            await db.query('DELETE FROM bookmarks WHERE post_id = ? AND user_id = ?', [postId, userId]);
+            return res.status(200).json({ message: "Bookmark removed.", bookmarked: false });
+        } else {
+            await db.query('INSERT INTO bookmarks (post_id, user_id) VALUES (?, ?)', [postId, userId]);
+            return res.status(201).json({ message: "Post bookmarked!", bookmarked: true });
+        }
+    } catch (error) {
+        console.error("Error toggling bookmark:", error.message);
+        res.status(500).json({ error: "Failed to toggle bookmark." });
+    }
+};
+
 // Export both functions at the very bottom
-module.exports = { addComment, toggleLike };
+module.exports = { addComment, getComments, toggleLike, toggleBookmark };

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Escapes | About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .card { animation: fadeInUp 0.5s ease forwards; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+
+<%- include('partials/header', { page: 'about' }) %>
+
+<main role="main" class="flex-grow p-6 md:p-12 max-w-5xl mx-auto w-full">
+    <section class="text-center mb-10">
+        <h1 class="text-3xl font-bold text-blue-900 mb-4">About Our Team</h1>
+        <p class="text-gray-700">We are a group of university students passionate about exploring the world without emptying our wallets.</p>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card bg-white p-6 rounded shadow border border-gray-200 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
+            <img src="/Media/WhatsApp Image 2026-03-13 at 09.16.51.jpeg" alt="Portrait of Mariana Naumenko, Lead Designer" class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-gray-100 object-cover">
+            <h3 class="text-xl font-bold text-blue-900">Mariana Naumenko</h3>
+            <p class="text-red-500 font-bold mb-2">Lead Designer</p>
+            <p class="text-gray-600 text-sm">Loves finding the best aesthetic cafes and hidden city art.</p>
+        </div>
+
+        <div class="card bg-white p-6 rounded shadow border border-gray-200 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
+            <img src="/Media/IMG_1156.JPG" alt="Portrait of Ivan Marochkin, Lead Developer" class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-gray-100 object-cover">
+            <h3 class="text-xl font-bold text-blue-900">Ivan Marochkin</h3>
+            <p class="text-red-500 font-bold mb-2">Lead Developer</p>
+            <p class="text-gray-600 text-sm">Nature enthusiast always looking for the toughest hiking trails.</p>
+        </div>
+
+        <div class="card bg-white p-6 rounded shadow border border-gray-200 text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
+            <img src="/Media/IMG_3396.jpg" alt="Portrait of Rodrigo, Content Manager" class="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-gray-100 object-cover">
+            <h3 class="text-xl font-bold text-blue-900">Rodrigo Chavez</h3>
+            <p class="text-red-500 font-bold mb-2">Content Manager</p>
+            <p class="text-gray-600 text-sm">The ultimate budget planner. Finds the cheapest bus tickets.</p>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>
+<script src="/js/script.js"></script>
+</body>
+</html>

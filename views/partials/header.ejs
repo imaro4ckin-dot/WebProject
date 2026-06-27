@@ -1,0 +1,39 @@
+<header role="banner" class="bg-blue-800 text-white p-4 md:px-8 flex justify-between items-center">
+    <a href="/" class="text-2xl font-bold text-white hover:text-red-300 transition-colors">Budget Escapes</a>
+
+    <nav role="navigation" aria-label="Main Navigation">
+        <ul class="nav-links hidden md:flex gap-6 m-0 p-0 list-none items-center">
+            <li><a href="/" class="hover:text-red-300 transition-colors <%= page === 'home' ? 'text-red-400 font-bold underline' : '' %>">Home</a></li>
+            <li><a href="/destinations" class="hover:text-red-300 transition-colors <%= page === 'destinations' ? 'text-red-400 font-bold underline' : '' %>">Destinations</a></li>
+            <li><a href="/book" class="hover:text-red-300 transition-colors <%= page === 'book' ? 'text-red-400 font-bold underline' : '' %>">Book a Trip</a></li>
+            <li><a href="/about" class="hover:text-red-300 transition-colors <%= page === 'about' ? 'text-red-400 font-bold underline' : '' %>">About Us</a></li>
+            <li><a href="/contact" class="hover:text-red-300 transition-colors <%= page === 'contact' ? 'text-red-400 font-bold underline' : '' %>">Contact</a></li>
+
+            <% if (user) { %>
+                <li class="relative group">
+                    <a href="/users/<%= user.id %>" class="flex items-center gap-2 hover:text-red-300 transition-colors">
+                        <img src="/Media/<%= user.profile_pic %>" alt="Avatar" class="w-8 h-8 rounded-full object-cover border-2 border-white">
+                        <span class="font-bold"><%= user.username %></span>
+                    </a>
+                </li>
+                <li>
+                    <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded transition-colors text-sm">Logout</button>
+                </li>
+            <% } else { %>
+                <li><a href="/login" class="hover:text-red-300 transition-colors <%= page === 'login' ? 'text-red-400 font-bold underline' : '' %>">Login</a></li>
+                <li><a href="/register" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded transition-colors text-sm">Register</a></li>
+            <% } %>
+        </ul>
+        <button class="menu-toggle md:hidden text-white text-2xl" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    </nav>
+</header>
+
+<script>
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/';
+        });
+    }
+</script>

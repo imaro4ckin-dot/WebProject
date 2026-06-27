@@ -1,12 +1,33 @@
 const db = require('../models/db');
 
 const getAllPosts = async (req, res) => {
+    // Look for ?category= or ?q= in the URL
+    const { category, q } = req.query;
+
     try {
-        const [rows] = await db.query('SELECT * FROM posts');
+        let sqlQuery = 'SELECT * FROM posts WHERE 1=1';
+        let queryParams = [];
+
+        // If they click a category filter
+        if (category) {
+            sqlQuery += ' AND category = ?';
+            queryParams.push(category);
+        }
+
+        // If they use a text search bar
+        if (q) {
+            sqlQuery += ' AND (title LIKE ? OR content LIKE ?)';
+            queryParams.push(`%${q}%`, `%${q}%`);
+        }
+
+        sqlQuery += ' ORDER BY created_at DESC';
+
+        const [rows] = await db.query(sqlQuery, queryParams);
         res.json(rows);
+
     } catch(err) {
-        console.error(err);
-        res.status(500).json({error: err});
+        console.error("Error fetching posts:", err);
+        res.status(500).json({ error: "Failed to fetch posts." });
     }
 };
 
@@ -87,5 +108,27 @@ const deletePost = async (req, res) => {
     }
 };
 
+const getPostById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query(
+            `SELECT posts.*, users.username, users.profile_pic
+             FROM posts
+             JOIN users ON posts.user_id = users.id
+             WHERE posts.id = ?`,
+            [id]
+        );
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Post not found." });
+        }
+        // Increment view counter
+        await db.query('UPDATE posts SET views = views + 1 WHERE id = ?', [id]);
+        res.json(rows[0]);
+    } catch (err) {
+        console.error("Error fetching post:", err);
+        res.status(500).json({ error: "Failed to fetch post." });
+    }
+};
+
 // FIX 3: Consolidated export at the very bottom of the file
-module.exports = { getAllPosts, createPost, updatePost, deletePost };
+module.exports = { getAllPosts, getPostById, createPost, updatePost, deletePost };

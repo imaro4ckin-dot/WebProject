@@ -7,11 +7,13 @@ const { ensureAuthenticated } = require('../middleware/authMiddleware');
 
 router.get('/', postController.getAllPosts);
 router.post('/', ensureAuthenticated, postController.createPost);
+router.get('/:id', postController.getPostById);
 router.put('/:id', ensureAuthenticated, postController.updatePost);
 router.delete('/:id', ensureAuthenticated, postController.deletePost);
 
-// <-- 2. Add these two new routes at the bottom! -->
+router.get('/:id/comments', interactionController.getComments);
 router.post('/:id/comments', ensureAuthenticated, interactionController.addComment);
 router.post('/:id/like', ensureAuthenticated, interactionController.toggleLike);
+router.post('/:id/bookmark', ensureAuthenticated, interactionController.toggleBookmark);
 
 module.exports = router;
