@@ -26,9 +26,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Make user available in all EJS templates
+// Make user and base URL available in all EJS templates
 app.use((req, res, next) => {
     res.locals.user = req.user || null;
+    res.locals.baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
     next();
 });
 
@@ -72,6 +73,26 @@ app.get('/destinations', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.render('destinations', { posts: [], category: 'all', q: '' });
+    }
+});
+
+// Create post page (protected) — must be BEFORE /posts/:id
+app.get('/posts/create', (req, res) => {
+    if (!req.user) return res.redirect('/login');
+    res.render('create-post', { post: undefined });
+});
+
+// Edit post page (protected) — must be BEFORE /posts/:id
+app.get('/posts/:id/edit', async (req, res) => {
+    if (!req.user) return res.redirect('/login');
+    const { id } = req.params;
+    try {
+        const [rows] = await db.query('SELECT * FROM posts WHERE id = ? AND user_id = ?', [id, req.user.id]);
+        if (rows.length === 0) return res.status(403).render('404');
+        res.render('create-post', { post: rows[0] });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading post editor');
     }
 });
 

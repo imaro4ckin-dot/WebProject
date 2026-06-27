@@ -10,6 +10,11 @@
             <li><a href="/contact" class="hover:text-red-300 transition-colors <%= page === 'contact' ? 'text-red-400 font-bold underline' : '' %>">Contact</a></li>
 
             <% if (user) { %>
+                <li>
+                    <a href="/posts/create" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded transition-colors text-sm">
+                        + Write Post
+                    </a>
+                </li>
                 <li class="relative group">
                     <a href="/users/<%= user.id %>" class="flex items-center gap-2 hover:text-red-300 transition-colors">
                         <img src="/Media/<%= user.profile_pic %>" alt="Avatar" class="w-8 h-8 rounded-full object-cover border-2 border-white">
@@ -17,7 +22,7 @@
                     </a>
                 </li>
                 <li>
-                    <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded transition-colors text-sm">Logout</button>
+                    <button id="logoutBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded transition-colors text-sm">Logout</button>
                 </li>
             <% } else { %>
                 <li><a href="/login" class="hover:text-red-300 transition-colors <%= page === 'login' ? 'text-red-400 font-bold underline' : '' %>">Login</a></li>

@@ -32,20 +32,25 @@ const getAllPosts = async (req, res) => {
 };
 
 const createPost  = async (req, res) => {
-   // 1. We removed user_id from here...
-   const { title, slug, content, category } = req.body;
-
-   // 2. ...and we grab it securely from Passport here!
+   const { title, content, category, tags } = req.body;
    const userId = req.user.id;
+   const image = req.file ? req.file.filename : null;
 
-   if (!title || !slug || !content || !category) {
-       return res.status(400).json({ error: "Missing required fields." });
+   // Auto-generate slug from title
+   const slug = title.toLowerCase()
+       .replace(/[^a-z0-9\s-]/g, '')
+       .trim()
+       .replace(/\s+/g, '-')
+       + '-' + Date.now();
+
+   if (!title || !content || !category) {
+       return res.status(400).json({ error: "Title, content and category are required." });
    }
 
    try {
        const [result] = await db.query(
-            'INSERT INTO posts (user_id, title, slug, content, category) VALUES (?, ?, ?, ?, ?)',
-            [userId, title, slug, content, category]
+            'INSERT INTO posts (user_id, title, slug, content, category, tags, image) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [userId, title, slug, content, category, tags || null, image]
         );
         res.status(201).json({
             message: "Post created successfully!",
@@ -58,32 +63,43 @@ const createPost  = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-    const { title, slug, content, category } = req.body;
-
-    // FIX 1: Get the IDs from the URL params and Passport session
+    const { title, content, category, tags } = req.body;
     const postId = req.params.id;
     const userId = req.user.id;
+    const image = req.file ? req.file.filename : null;
 
-    if (!title || !slug || !content || !category) {
-        return res.status(400).json({error: "Missing title, slug, content, or category"});
+    if (!title || !content || !category) {
+        return res.status(400).json({ error: "Title, content and category are required." });
     }
 
-    try {
-        const [result] = await db.query(
-            'UPDATE posts SET title = ?, slug = ?, content = ?, category = ? WHERE id = ? AND user_id = ?',
-            // FIX 2: Added postId and userId to match the 6 question marks
-            [title, slug, content, category, postId, userId]
-        );
+    // Auto-generate new slug from title
+    const slug = title.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        + '-' + Date.now();
 
-        if (result.affectedRows == 0) {
-            return res.status(403).json({error: "Not authorized to edit this post or post is not existing."});
+    try {
+        let sql, params;
+        if (image) {
+            sql = 'UPDATE posts SET title=?, slug=?, content=?, category=?, tags=?, image=? WHERE id=? AND user_id=?';
+            params = [title, slug, content, category, tags || null, image, postId, userId];
+        } else {
+            sql = 'UPDATE posts SET title=?, slug=?, content=?, category=?, tags=? WHERE id=? AND user_id=?';
+            params = [title, slug, content, category, tags || null, postId, userId];
         }
 
-        res.status(200).json({message: "Post updated successfully!"});
+        const [result] = await db.query(sql, params);
+
+        if (result.affectedRows === 0) {
+            return res.status(403).json({ error: "Not authorized to edit this post or post does not exist." });
+        }
+
+        res.status(200).json({ message: "Post updated successfully!" });
 
     } catch(err) {
         console.error(err);
-        res.status(500).json({error: "Failed to update post."});
+        res.status(500).json({ error: "Failed to update post." });
     }
 };
 
