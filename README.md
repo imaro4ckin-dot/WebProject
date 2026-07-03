@@ -1,42 +1,156 @@
-# Student Budget Escapes 🌍✈️
+# Student Budget Escapes
 
-**Student Budget Escapes** is a responsive, accessible, and interactive travel blog designed specifically for university students looking for affordable weekend adventures. 
+A full-stack travel blog platform for university students to share and discover budget-friendly weekend adventures. Built with Node.js, Express, MySQL, and EJS templates.
 
-This project was developed as the final showcase for the **Web Engineering 1** course.
+Developed as the final project for the **Web Engineering 2** course.
 
-## 🎯 Purpose of the Project
-Our client is a local university travel club (acting as a local tourism board) that needs a dedicated platform to share budget-friendly travel experiences and recommendations with fellow students. 
+---
 
-The goal of this website is to provide an easy-to-navigate, visually appealing space where users can explore local hidden gems, filter trips based on their interests (Nature vs. City), view photo galleries, and book upcoming group trips.
+## Features
 
+- **Authentication** — Register, log in/out with secure bcrypt-hashed passwords and session management
+- **User Profiles** — Editable bio and profile picture; view all posts by a user
+- **Blog Posts (CRUD)** — Create, read, edit, and delete travel posts with rich text (Quill editor), categories, tags, and images
+- **Comments** — Leave comments on any post
+- **Likes & Bookmarks** — Like posts and save them to your personal bookmarks
+- **Search & Filtering** — Filter posts by category (Nature, City, Culture, Food, Adventure) or keyword search
+- **Social Sharing** — Share posts to Twitter and Facebook
+- **Responsive Design** — Mobile-first layout with Tailwind CSS
 
-## 🚀 Features & Implementation
-We built this project adhering to modern web development best practices:
+---
 
-**Semantic HTML:** We structured our web pages using semantic tags (`<header>`, `<main>`, `<nav>`, `<article>`, `<footer>`) to ensure high accessibility and readability for search engines and screen readers.
-**Responsive Web Design (RWD):** The website fluidly adapts to mobile, tablet, and desktop screens using **CSS Flexbox** and **CSS Grid**.
-**Digital Accessibility (a11y):** Following WCAG guidelines, our site is perceivable, operable, understandable, and robust.We implemented **ARIA attributes** (landmarks, states like `aria-expanded`), keyboard-navigable elements (such as the gallery lightbox), and properly paired form labels.
-**Interactive JavaScript:** We included a custom destination filtering system, a mobile hamburger menu, and a photo gallery lightbox without relying on external JS libraries or a CMS.
-**Extra Features:** We utilized CSS transitions, hover effects, and layout transformations to create a modern, engaging user experience.
+## Tech Stack
 
-## 💻 Technologies Used
-As per the project requirements, no Content Management Systems (CMS) were used. 
-* **HTML5:** For page structure and semantics.
-**Tailwind CSS (via CDN):** Used as our external CSS framework to handle UI guidelines, typography, and responsive grid/flexbox layouts.
-* **Vanilla JavaScript:** For DOM manipulation and handling user interactions.
+| Layer | Technology |
+|---|---|
+| Backend | Node.js, Express.js 5 |
+| Database | MySQL 8+ |
+| Frontend | EJS templates, Tailwind CSS (CDN) |
+| Authentication | Passport.js (local strategy) |
+| Rich Text Editor | Quill.js 2 |
+| File Uploads | Multer |
+| Sessions | express-session |
 
-## 📂 Project Structure
-* `index.html` - The home page featuring the latest blog posts.
-* `destinations.html` - The core travel blog page featuring destination filters, an interactive map of Heidelberg, and a lightbox photo gallery.
-* `about.html` - Information about our team and mission.
-* `book.html` - An accessible form allowing students to request a spot on a trip.
-* `contact.html` - An accessible contact form for users to submit their own hidden gem recommendations.
-* `script.js` - Contains all JavaScript logic for menus, filters, lightboxes, and form handling.
+---
 
-## 🛠️ Instructions for Deployment / How to Run
-Because this project is built entirely with static files (HTML, CSS, JS), it does not require a local server, database, or build process to run.
+## Prerequisites
 
-1. Download or clone this repository to your local machine.
-2. Ensure all files (`.html` and `.js` files) are located in the exact same folder.
-3. Double-click `index.html` to open it in any modern web browser (Chrome, Firefox, Safari, Edge).
-4. *Optional:* The website can easily be deployed live by dropping the folder into a free static hosting service.
+- Node.js 18+
+- MySQL 8+
+
+---
+
+## Installation & Setup
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd WebProject
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```
+DATABASE_URL=mysql://your_user:your_password@localhost:3306/student_budget_escapes
+SESSION_SECRET=some_long_random_string
+```
+
+### 4. Create the database
+
+In MySQL, create the database first:
+
+```sql
+CREATE DATABASE student_budget_escapes;
+```
+
+### 5. Run database migrations
+
+This creates all required tables (users, posts, comments, likes, bookmarks):
+
+```bash
+node models/setup.js
+```
+
+### 6. Start the server
+
+```bash
+npm start
+```
+
+The app will be running at `http://localhost:3000`.
+
+---
+
+## Project Structure
+
+```
+WebProject/
+├── app.js                  # Express app entry point
+├── config/
+│   └── passport.js         # Passport.js authentication strategy
+├── controllers/
+│   ├── authController.js   # Register / login logic
+│   ├── postController.js   # Post CRUD logic
+│   ├── userController.js   # Profile management
+│   └── interactionController.js  # Comments, likes, bookmarks
+├── middleware/
+│   └── authMiddleware.js   # Route protection (ensureAuthenticated)
+├── models/
+│   ├── db.js               # MySQL connection pool
+│   └── setup.js            # Database schema setup script
+├── routes/
+│   ├── auth.js             # /api/auth/* endpoints
+│   ├── posts.js            # /api/posts/* and /posts/* endpoints
+│   └── users.js            # /api/users/* and /users/* endpoints
+├── views/
+│   ├── partials/           # header.ejs, footer.ejs
+│   ├── index.ejs           # Home page
+│   ├── destinations.ejs    # Blog listing with filters
+│   ├── post.ejs            # Single post view
+│   ├── create-post.ejs     # Create / edit post form
+│   ├── profile.ejs         # User profile page
+│   ├── login.ejs           # Login form
+│   ├── register.ejs        # Registration form
+│   └── ...                 # about, contact, book, 404
+├── public/
+│   ├── js/                 # Client-side scripts
+│   └── Media/              # Uploaded images
+├── .env.example            # Environment variable template
+└── package.json
+```
+
+---
+
+## Database Schema
+
+| Table | Description |
+|---|---|
+| `users` | Accounts (username, email, hashed password, bio, profile pic) |
+| `posts` | Blog posts (title, slug, content, category, tags, image, views) |
+| `comments` | Comments linked to posts and users |
+| `likes` | One like per user per post |
+| `bookmarks` | One bookmark per user per post |
+
+---
+
+## MVC Architecture
+
+- **Models** — `models/db.js` manages the MySQL connection pool; raw SQL queries are used directly in controllers
+- **Views** — EJS templates in `/views`, rendered server-side
+- **Controllers** — Business logic split across `authController`, `postController`, `userController`, `interactionController`
+- **Routes** — URL mapping in `/routes`, separated by resource type
