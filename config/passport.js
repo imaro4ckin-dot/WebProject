@@ -2,25 +2,18 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const db = require('../models/db');
+const User = require('../models/User');
 
 module.exports = function(passport) {
     passport.use(
         new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
             try {
-                // 1. Check if the email exists
-                const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-                
-                if (users.length === 0) {
-                    return done(null, false, { message: 'That email is not registered.' });
-                }
+                const user = await User.getByEmail(email);
+                if (!user) return done(null, false, { message: 'That email is not registered.' });
 
-                const user = users[0];
-
-                // 2. Match the password
                 const isMatch = await bcrypt.compare(password, user.password);
-                
                 if (isMatch) {
-                    return done(null, user); // Success!
+                    return done(null, user);
                 } else {
                     return done(null, false, { message: 'Password incorrect.' });
                 }
@@ -30,12 +23,10 @@ module.exports = function(passport) {
         })
     );
 
-    // This determines which data of the user object should be stored in the session (the ID)
     passport.serializeUser((user, done) => {
         done(null, user.id);
     });
 
-    // This takes the ID from the session and fetches the full user object from the DB
     passport.deserializeUser(async (id, done) => {
         try {
             const [users] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
