@@ -4,85 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Budget Escapes | <%= profileUser.username %>'s Profile</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+<body style="display:flex; flex-direction:column; min-height:100vh; margin:0;">
 
 <%- include('partials/header', { page: '' }) %>
 
-<main role="main" class="flex-grow p-6 md:p-12 max-w-4xl mx-auto w-full">
+<main role="main" class="container" style="padding-top: var(--space-6); padding-bottom: var(--space-8);">
 
-    <section class="bg-white p-8 rounded shadow border border-gray-200 mb-8 flex flex-col md:flex-row gap-8 items-start">
-        <img src="/Media/<%= profileUser.profile_pic %>"
-             alt="Profile picture of <%= profileUser.username %>"
-             class="w-32 h-32 rounded-full object-cover border-4 border-blue-100 shrink-0">
+    <section class="profile-header" style="border:1px solid var(--border); border-radius:var(--radius-lg); padding: var(--space-6); background: var(--surface);">
+        <span class="avatar" style="width:128px; height:128px; border:4px solid var(--accent-soft);">
+            <img src="/Media/<%= profileUser.profile_pic %>" alt="Profile picture of <%= profileUser.username %>">
+        </span>
 
-        <div class="flex-1">
-            <h1 class="text-3xl font-bold text-blue-900 mb-1"><%= profileUser.username %></h1>
-            <p class="text-gray-500 text-sm mb-3">Member since <%= new Date(profileUser.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) %></p>
-            <p class="text-gray-700 leading-relaxed">
-                <%= profileUser.bio || 'No bio yet.' %>
-            </p>
+        <div class="profile-meta" style="flex:1;">
+            <h1><%= profileUser.username %></h1>
+            <p class="handle">Member since <%= new Date(profileUser.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) %></p>
+            <p><%= profileUser.bio || 'No bio yet.' %></p>
 
             <% if (user && user.id === profileUser.id) { %>
-                <button id="editProfileBtn" class="mt-4 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded transition-colors text-sm">
-                    Edit Profile
-                </button>
+                <button id="editProfileBtn" class="btn btn-sm" type="button" style="margin-top:6px;">Edit profile</button>
             <% } %>
         </div>
     </section>
 
     <!-- Edit profile form (hidden by default, only shown to the owner) -->
     <% if (user && user.id === profileUser.id) { %>
-    <section id="editProfileForm" class="hidden bg-white p-8 rounded shadow border border-gray-200 mb-8">
-        <h2 class="text-xl font-bold text-blue-900 mb-4">Edit Your Profile</h2>
-        <form id="profileForm" enctype="multipart/form-data" class="flex flex-col gap-4">
-            <div class="flex flex-col">
-                <label for="bio" class="font-bold text-blue-900 mb-1">Bio:</label>
-                <textarea id="bio" name="bio" rows="3"
-                    placeholder="Tell the community about yourself..."
-                    class="p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none"><%= profileUser.bio || '' %></textarea>
+    <section id="editProfileForm" class="form-card hidden" style="margin-top: var(--space-5);">
+        <h2 style="font-size:20px;">Edit your profile</h2>
+        <form id="profileForm" enctype="multipart/form-data">
+            <div class="field">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" rows="3" placeholder="Tell the community about yourself..."><%= profileUser.bio || '' %></textarea>
             </div>
-            <div class="flex flex-col">
-                <label for="profile_pic" class="font-bold text-blue-900 mb-1">Profile Picture:</label>
-                <input type="file" id="profile_pic" name="profile_pic" accept="image/*"
-                    class="p-2 border border-gray-300 rounded">
+            <div class="field">
+                <label for="profile_pic">Profile picture</label>
+                <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
             </div>
-            <div class="flex gap-3">
-                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition-colors">Save Changes</button>
-                <button type="button" id="cancelEditBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-6 rounded transition-colors">Cancel</button>
+            <div class="form-actions">
+                <button type="submit" class="btn">Save changes</button>
+                <button type="button" id="cancelEditBtn" class="btn btn-outline">Cancel</button>
             </div>
-            <p id="profileMsg" class="text-green-700 font-bold hidden"></p>
+            <p id="profileMsg" class="text-success hidden" style="font-weight:700; margin-top:12px;"></p>
         </form>
     </section>
     <% } %>
 
     <!-- User's posts -->
-    <section>
-        <h2 class="text-2xl font-bold text-blue-900 mb-6">Posts by <%= profileUser.username %> (<%= posts.length %>)</h2>
+    <section style="margin-top: var(--space-7);">
+        <h2 style="font-size:22px; margin-bottom: var(--space-5);">Posts by <%= profileUser.username %> (<%= posts.length %>)</h2>
 
         <% if (posts.length === 0) { %>
-            <p class="text-gray-500">No posts published yet.</p>
+            <p style="color: var(--text-muted);">No posts published yet.</p>
         <% } else { %>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <%
+                const categoryIcon = (category) => {
+                    const key = (category || '').toLowerCase();
+                    if (key.includes('beach') || key.includes('island')) return 'coconut-tree';
+                    if (key.includes('train') || key.includes('rail')) return 'train';
+                    if (key.includes('hike') || key.includes('hiking') || key.includes('forest') || key.includes('nature')) return 'tree';
+                    if (key.includes('mountain') || key.includes('summit') || key.includes('adventure')) return 'summit';
+                    return 'plane';
+                };
+            %>
+            <div class="grid-3">
                 <% posts.forEach(function(post) { %>
-                    <div class="bg-white rounded shadow border border-gray-200 overflow-hidden flex flex-col hover:-translate-y-1 transition-transform hover:shadow-lg">
+                    <article class="card">
                         <% if (post.image) { %>
-                            <img src="/Media/<%= post.image %>" alt="<%= post.title %>" class="w-full h-40 object-cover">
+                            <div class="card-img" style="height:130px;"><img src="/Media/<%= post.image %>" alt="<%= post.title %>"></div>
                         <% } else { %>
-                            <div class="w-full h-40 bg-blue-100 flex items-center justify-center text-blue-300 text-4xl">✈</div>
+                            <div class="card-img" style="height:130px;"><span class="icon-slot" style="position:static; width:28px; height:28px; opacity:1; color:var(--accent);"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span></div>
                         <% } %>
-                        <div class="p-4 flex flex-col flex-grow">
-                            <span class="text-xs font-bold uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded mb-2 self-start"><%= post.category %></span>
-                            <h3 class="font-bold text-blue-900 mb-2 flex-grow"><%= post.title %></h3>
-                            <div class="flex gap-3 items-center">
-                                <a href="/posts/<%= post.id %>" class="text-red-500 font-bold hover:underline text-sm">Read &rarr;</a>
+                        <div class="card-body">
+                            <span class="tag"><%= post.category %></span>
+                            <h3 style="font-size:16px;"><%= post.title %></h3>
+                            <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+                                <a href="/posts/<%= post.id %>" class="read-more" style="font-size:13px;">Read →</a>
                                 <% if (user && user.id === profileUser.id) { %>
-                                    <button onclick="deletePost(<%= post.id %>)" class="text-gray-400 hover:text-red-500 text-sm transition-colors ml-auto">Delete</button>
+                                    <button onclick="deletePost(<%= post.id %>)" class="btn-ghost" style="margin-left:auto; font-size:13px; color:var(--text-muted);" type="button">Delete</button>
                                 <% } %>
                             </div>
                         </div>
-                    </div>
+                    </article>
                 <% }) %>
             </div>
         <% } %>
@@ -115,11 +121,12 @@
             const msg = document.getElementById('profileMsg');
             if (res.ok) {
                 msg.textContent = 'Profile updated! Refresh to see changes.';
-                msg.classList.remove('hidden');
+                msg.classList.remove('hidden', 'text-danger');
+                msg.classList.add('text-success');
             } else {
                 msg.textContent = data.error || 'Update failed.';
-                msg.classList.remove('hidden', 'text-green-700');
-                msg.classList.add('text-red-600');
+                msg.classList.remove('hidden', 'text-success');
+                msg.classList.add('text-danger');
             }
         });
     }

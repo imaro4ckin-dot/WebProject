@@ -4,128 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Budget Escapes | <%= post.title %></title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+<body style="display:flex; flex-direction:column; min-height:100vh; margin:0;">
 
 <%- include('partials/header', { page: 'destinations' }) %>
 
-<main role="main" class="flex-grow p-6 md:p-12 max-w-4xl mx-auto w-full">
+<main role="main" class="article">
 
-    <a href="/destinations" aria-label="Go back to destinations" class="text-blue-800 hover:text-red-500 transition-colors mb-6 inline-block font-bold">
-        &larr; Back to Destinations
-    </a>
+    <a href="/destinations" aria-label="Go back to destinations" class="back-link">← Back to destinations</a>
 
-    <article class="bg-white p-6 md:p-10 rounded shadow border border-gray-200">
+    <%
+        // Same category → icon mapping used on the destinations grid, kept here
+        // so the article header can carry a faint watermark icon too.
+        const categoryIcon = (category) => {
+            const key = (category || '').toLowerCase();
+            if (key.includes('beach') || key.includes('island')) return 'coconut-tree';
+            if (key.includes('train') || key.includes('rail')) return 'train';
+            if (key.includes('hike') || key.includes('hiking') || key.includes('forest') || key.includes('nature')) return 'tree';
+            if (key.includes('mountain') || key.includes('summit') || key.includes('adventure')) return 'summit';
+            return 'plane';
+        };
+    %>
 
-        <header class="mb-8 border-b border-gray-200 pb-6">
-            <h1 class="text-4xl font-bold text-blue-900 mb-4"><%= post.title %></h1>
-            <div class="flex flex-wrap gap-4 text-gray-600 text-sm">
-                <span class="font-bold text-red-500">
-                    By <a href="/users/<%= post.user_id %>" class="hover:underline"><%= post.username %></a>
-                </span>
-                <span>|</span>
-                <span>Published: <%= new Date(post.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
-                <span>|</span>
-                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded font-bold"><%= post.category %></span>
+    <article class="article-panel">
+        <span class="icon-slot" style="top:-10px; right:-10px; width:130px; height:130px; opacity:0.06;"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span>
+
+        <header style="margin-bottom: var(--space-6); border-bottom: 1px solid var(--border); padding-bottom: var(--space-5);">
+            <h1 style="font-size:32px; margin-bottom:14px;"><%= post.title %></h1>
+            <div class="article-meta">
+                <span class="by">By <a href="/users/<%= post.user_id %>"><%= post.username %></a></span>
+                <span class="sep">|</span>
+                <span>Published <%= new Date(post.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+                <span class="sep">|</span>
+                <span class="tag" style="margin-bottom:0;"><%= post.category %></span>
                 <% if (post.views !== undefined) { %>
-                    <span class="text-gray-400">👁 <%= post.views %> views</span>
+                    <span>👁 <%= post.views %> views</span>
                 <% } %>
             </div>
             <% if (user && user.id === post.user_id) { %>
-                <div class="flex gap-3 mt-3">
-                    <a href="/posts/<%= post.id %>/edit" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-1 px-4 rounded transition-colors">Edit</a>
-                    <button id="deletePostBtn" class="text-sm bg-red-100 hover:bg-red-200 text-red-700 font-bold py-1 px-4 rounded transition-colors">Delete</button>
+                <div class="article-owner-actions">
+                    <a href="/posts/<%= post.id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+                    <button id="deletePostBtn" class="btn btn-danger btn-sm" type="button">Delete</button>
                 </div>
             <% } %>
         </header>
 
         <% if (post.image) { %>
-            <img src="/Media/<%= post.image %>" alt="<%= post.title %>" class="w-full h-96 md:h-[36rem] object-cover object-center rounded mb-8 shadow-sm">
+            <div class="article-cover"><img src="/Media/<%= post.image %>" alt="<%= post.title %>"></div>
         <% } %>
 
-        <div class="text-gray-700 leading-relaxed space-y-6 text-lg">
+        <div class="article-body">
             <%- post.content %>
         </div>
 
-        <!-- Like & Bookmark bar -->
-        <div class="flex items-center gap-4 mt-10 pt-6 border-t border-gray-200">
+        <!-- Like & bookmark bar -->
+        <div class="interaction-bar" style="flex-wrap:wrap;">
             <% if (user) { %>
-                <button id="likeBtn"
-                    class="flex items-center gap-2 font-bold py-2 px-5 rounded-full transition-colors
-                           <%= liked ? 'bg-blue-600 text-white' : 'bg-blue-100 hover:bg-blue-200 text-blue-800' %>">
+                <button id="likeBtn" class="pill-btn <%= liked ? 'like-active' : '' %>" type="button">
                     ❤ <span id="likeLabel"><%= liked ? 'Liked' : 'Like' %></span>
-                    <span id="likeCount" class="text-sm font-normal">(<%= likeCount %>)</span>
+                    <span id="likeCount" class="pill-count">(<%= likeCount %>)</span>
                 </button>
-                <button id="bookmarkBtn"
-                    class="flex items-center gap-2 font-bold py-2 px-5 rounded-full transition-colors
-                           <%= bookmarked ? 'bg-yellow-400 text-white' : 'bg-yellow-100 hover:bg-yellow-200 text-yellow-800' %>">
+                <button id="bookmarkBtn" class="pill-btn <%= bookmarked ? 'bookmark-active' : '' %>" type="button">
                     🔖 <span id="bookmarkLabel"><%= bookmarked ? 'Saved' : 'Save' %></span>
                 </button>
             <% } else { %>
-                <p class="text-gray-500 text-sm">
-                    <a href="/login" class="text-blue-600 hover:underline font-bold">Log in</a> to like or save this post.
+                <p style="color:var(--text-muted); font-size:13px; margin:0;">
+                    <a href="/login" style="color:var(--accent); font-weight:700; text-decoration:none;">Log in</a> to like or save this post.
                 </p>
             <% } %>
 
-            <!-- Social sharing (Req 7.2) -->
-            <div class="ml-auto flex gap-3">
+            <div class="share-links">
                 <a href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(post.title) %>&url=<%= encodeURIComponent(baseUrl + '/posts/' + post.id) %>"
-                   target="_blank" rel="noopener"
-                   class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded transition-colors text-sm"
-                   aria-label="Share on Twitter">
-                    𝕏 Twitter
-                </a>
+                   target="_blank" rel="noopener" class="btn btn-outline btn-sm" aria-label="Share on Twitter">𝕏 Twitter</a>
                 <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(baseUrl + '/posts/' + post.id) %>"
-                   target="_blank" rel="noopener"
-                   class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition-colors text-sm"
-                   aria-label="Share on Facebook">
-                    Facebook
-                </a>
+                   target="_blank" rel="noopener" class="btn btn-outline btn-sm" aria-label="Share on Facebook">Facebook</a>
             </div>
         </div>
-
     </article>
 
     <!-- Comments section -->
-    <section class="mt-8 bg-white p-6 md:p-10 rounded shadow border border-gray-200">
-        <h3 class="text-2xl font-bold text-blue-900 mb-6">Comments (<%= comments.length %>)</h3>
+    <section class="article-panel">
+        <h3 style="font-size:20px; margin-bottom: var(--space-5);">Comments (<%= comments.length %>)</h3>
 
-        <div id="commentList" class="space-y-6 mb-8">
+        <div id="commentList" style="margin-bottom: var(--space-6);">
             <% if (comments.length === 0) { %>
-                <p id="noComments" class="text-gray-500 italic">No comments yet. Share your thoughts!</p>
+                <p id="noComments" style="color:var(--text-muted); font-style:italic;">No comments yet. Share your thoughts!</p>
             <% } %>
             <% comments.forEach(function(c) { %>
-                <div class="flex gap-4 border-b border-gray-100 pb-4">
-                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0">
-                        <%= c.username.charAt(0).toUpperCase() %>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-bold text-gray-900">
-                            <a href="/users/<%= c.user_id %>" class="hover:underline"><%= c.username %></a>
-                            <span class="text-xs font-normal text-gray-500 ml-2">
-                                <%= new Date(c.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %>
-                            </span>
-                        </p>
-                        <p class="text-gray-600"><%= c.body %></p>
+                <div class="comment">
+                    <div class="avatar"><%= c.username.charAt(0).toUpperCase() %></div>
+                    <div class="comment-body">
+                        <strong><a href="/users/<%= c.user_id %>" style="text-decoration:none; color:var(--text);"><%= c.username %></a></strong>
+                        <span class="meta"><%= new Date(c.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+                        <p><%= c.body %></p>
                     </div>
                 </div>
             <% }) %>
         </div>
 
         <% if (user) { %>
-            <form id="commentForm" class="border-t border-gray-100 pt-6">
-                <div class="mb-4">
-                    <textarea id="userComment" rows="3" placeholder="Write a comment..." required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none block"></textarea>
+            <form id="commentForm" style="border-top: 1px solid var(--border); padding-top: var(--space-5);">
+                <div class="field">
+                    <textarea id="userComment" rows="3" placeholder="Write a comment..." required></textarea>
                 </div>
-                <button type="submit" class="bg-blue-800 hover:bg-red-500 text-white font-bold py-2 px-6 rounded transition-all">
-                    Post Comment
-                </button>
+                <button type="submit" class="btn">Post comment</button>
             </form>
         <% } else { %>
-            <p class="text-gray-500 border-t border-gray-100 pt-6">
-                <a href="/login" class="text-blue-600 hover:underline font-bold">Log in</a> to leave a comment.
+            <p style="color:var(--text-muted); border-top: 1px solid var(--border); padding-top: var(--space-5);">
+                <a href="/login" style="color:var(--accent); font-weight:700; text-decoration:none;">Log in</a> to leave a comment.
             </p>
         <% } %>
     </section>

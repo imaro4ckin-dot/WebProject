@@ -4,49 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Budget Escapes | Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-        .card { animation: fadeInUp 0.5s ease forwards; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.4s; }
+        .card.animate { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen m-0">
+<body style="display:flex; flex-direction:column; min-height:100vh; margin:0;">
 
 <%- include('partials/header', { page: 'home' }) %>
 
-<main role="main" class="flex-grow">
-    <section class="bg-blue-100 text-center py-16 px-4 border-b border-gray-300">
-        <h1 class="text-4xl font-bold text-blue-900 mb-4">Discover Local Hidden Gems</h1>
-        <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Affordable, unforgettable weekend escapes for students on a budget.</p>
-        <a href="/destinations" class="inline-block bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded shadow transition-colors">
-            Explore Trips
-        </a>
+<main role="main" style="flex-grow:1;">
+    <section class="hero">
+        <span class="icon-slot" style="top:20px; left:40px; width:56px; height:56px; opacity:0.1;"><svg viewBox="0 0 32 32"><use href="#icon-plane"></use></svg></span>
+        <span class="icon-slot" style="top:24px; right:70px; width:50px; height:50px; opacity:0.1;"><svg viewBox="0 0 32 32"><use href="#icon-balloon"></use></svg></span>
+        <span class="icon-slot" style="bottom:14px; left:120px; width:40px; height:40px; opacity:0.1;"><svg viewBox="0 0 32 32"><use href="#icon-backpack"></use></svg></span>
+        <span class="icon-slot" style="bottom:24px; right:120px; width:42px; height:42px; opacity:0.1;"><svg viewBox="0 0 32 32"><use href="#icon-camera"></use></svg></span>
+
+        <div class="eyebrow">for students, by students</div>
+        <h1>Discover<br><span class="hl">HIDDEN GEMS</span></h1>
+        <p>Affordable, unforgettable weekend escapes for students on a budget.</p>
+        <a href="/destinations" class="btn btn-lg">Explore trips →</a>
     </section>
 
-    <section class="p-8 max-w-5xl mx-auto">
-        <h2 class="text-2xl font-bold text-center text-blue-900 mb-8">Recent Travel Posts</h2>
+    <section class="posts" style="position:relative; overflow:hidden;">
+        <span class="icon-slot" style="top:0px; right:10px; width:60px; height:60px; opacity:0.08;"><svg viewBox="0 0 32 32"><use href="#icon-summit"></use></svg></span>
+        <span class="icon-slot" style="bottom:20px; left:0px; width:50px; height:50px; opacity:0.08;"><svg viewBox="0 0 32 32"><use href="#icon-pool-ladder"></use></svg></span>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h2>Recent posts</h2>
+
+        <div class="grid">
             <% if (posts.length === 0) { %>
-                <p class="text-gray-500 col-span-3 text-center">No posts yet. Be the first to share a destination!</p>
+                <p class="text-center" style="grid-column: 1 / -1; color: var(--text-muted);">
+                    No posts yet. Be the first to share a destination!
+                </p>
             <% } %>
+            <%
+                // Maps a post's category to one of the decorative pixel icons.
+                // Falls back to a plane for anything unrecognized.
+                const categoryIcon = (category) => {
+                    const key = (category || '').toLowerCase();
+                    if (key.includes('beach') || key.includes('island')) return 'coconut-tree';
+                    if (key.includes('train') || key.includes('rail')) return 'train';
+                    if (key.includes('hike') || key.includes('hiking') || key.includes('forest')) return 'tree';
+                    if (key.includes('mountain') || key.includes('summit')) return 'summit';
+                    return 'plane';
+                };
+            %>
             <% posts.forEach(function(post, i) { %>
-                <article class="card bg-white rounded shadow border border-gray-200 overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg" style="animation-delay: <%= i * 0.15 %>s">
+                <article class="card animate" style="animation-delay: <%= i * 0.15 %>s">
                     <% if (post.image) { %>
-                        <img src="/Media/<%= post.image %>" alt="<%= post.title %>" class="w-full h-48 object-cover">
+                        <div class="card-img"><img src="/Media/<%= post.image %>" alt="<%= post.title %>"></div>
                     <% } else { %>
-                        <div class="w-full h-48 bg-blue-100 flex items-center justify-center text-blue-300 text-5xl">✈</div>
+                        <div class="card-img"><span class="icon-slot" style="position:static; width:34px; height:34px; opacity:1; color:var(--accent);"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span></div>
                     <% } %>
-                    <div class="p-6">
-                        <span class="text-xs font-bold uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded mb-2 inline-block"><%= post.category %></span>
-                        <h3 class="text-xl font-bold text-blue-800 mb-1"><%= post.title %></h3>
-                        <p class="text-gray-500 text-sm mb-3">By <a href="/users/<%= post.user_id %>" class="hover:underline text-red-500"><%= post.username %></a></p>
-                        <a href="/posts/<%= post.id %>" aria-label="Read full post: <%= post.title %>" class="text-red-500 font-bold hover:underline">Read Full Post &rarr;</a>
+                    <div class="card-body">
+                        <span class="tag">
+                            <span class="icon-slot" style="position:static; width:11px; height:11px; opacity:1; vertical-align:-1px; margin-right:4px; color:var(--accent-2);"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span><%= post.category %>
+                        </span>
+                        <h3><%= post.title %></h3>
+                        <p class="byline">by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
+                        <a href="/posts/<%= post.id %>" aria-label="Read full post: <%= post.title %>" class="read-more">Read full post →</a>
                     </div>
                 </article>
             <% }) %>
