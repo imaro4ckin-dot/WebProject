@@ -15,19 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const label   = document.getElementById('likeLabel');
             const countEl = document.getElementById('likeCount');
-            const isLiked = likeBtn.dataset.liked === 'true';
+            const isLiked = likeBtn.classList.contains('like-active');
 
             if (isLiked) {
-                likeBtn.dataset.liked = 'false';
-                likeBtn.className = likeBtn.className
-                    .replace('bg-terracotta text-white border-terracotta', 'bg-white text-stone-600 border-stone-200 hover:border-terracotta hover:text-terracotta');
+                likeBtn.classList.remove('like-active');
+                likeBtn.setAttribute('aria-pressed', 'false');
+                likeBtn.setAttribute('aria-label', 'Like this post');
                 label.textContent = 'Like';
                 const current = parseInt(countEl.textContent.replace(/\D/g, ''));
                 countEl.textContent = `(${Math.max(0, current - 1)})`;
             } else {
-                likeBtn.dataset.liked = 'true';
-                likeBtn.className = likeBtn.className
-                    .replace('bg-white text-stone-600 border-stone-200 hover:border-terracotta hover:text-terracotta', 'bg-terracotta text-white border-terracotta');
+                likeBtn.classList.add('like-active');
+                likeBtn.setAttribute('aria-pressed', 'true');
+                likeBtn.setAttribute('aria-label', 'Unlike this post');
                 label.textContent = 'Liked';
                 const current = parseInt(countEl.textContent.replace(/\D/g, ''));
                 countEl.textContent = `(${current + 1})`;
@@ -42,17 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) return;
 
             const label        = document.getElementById('bookmarkLabel');
-            const isBookmarked = bookmarkBtn.dataset.bookmarked === 'true';
+            const isBookmarked = bookmarkBtn.classList.contains('bookmark-active');
 
             if (isBookmarked) {
-                bookmarkBtn.dataset.bookmarked = 'false';
-                bookmarkBtn.className = bookmarkBtn.className
-                    .replace('bg-forest text-white border-forest', 'bg-white text-stone-600 border-stone-200 hover:border-forest hover:text-forest');
+                bookmarkBtn.classList.remove('bookmark-active');
+                bookmarkBtn.setAttribute('aria-pressed', 'false');
+                bookmarkBtn.setAttribute('aria-label', 'Bookmark this post');
                 label.textContent = 'Save';
             } else {
-                bookmarkBtn.dataset.bookmarked = 'true';
-                bookmarkBtn.className = bookmarkBtn.className
-                    .replace('bg-white text-stone-600 border-stone-200 hover:border-forest hover:text-forest', 'bg-forest text-white border-forest');
+                bookmarkBtn.classList.add('bookmark-active');
+                bookmarkBtn.setAttribute('aria-pressed', 'true');
+                bookmarkBtn.setAttribute('aria-label', 'Remove bookmark');
                 label.textContent = 'Saved';
             }
         });

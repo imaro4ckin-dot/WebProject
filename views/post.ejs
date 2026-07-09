@@ -13,9 +13,15 @@
 
 <%- include('partials/header', { page: 'destinations' }) %>
 
-<main role="main" class="article">
+<main id="main-content" role="main" class="article">
 
-    <a href="/destinations" aria-label="Go back to destinations" class="back-link">← Back to destinations</a>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/destinations">Destinations</a></li>
+            <li aria-current="page"><%= post.title %></li>
+        </ol>
+    </nav>
 
     <%
         // Same category → icon mapping used on the destinations grid, kept here
@@ -31,7 +37,7 @@
     %>
 
     <article class="article-panel">
-        <span class="icon-slot" style="top:-10px; right:-10px; width:130px; height:130px; opacity:0.06;"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span>
+        <span class="icon-slot" style="top:-10px; right:-10px; width:130px; height:130px; opacity:0.06;" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span>
 
         <header style="margin-bottom: var(--space-6); border-bottom: 1px solid var(--border); padding-bottom: var(--space-5);">
             <h1 style="font-size:32px; margin-bottom:14px;"><%= post.title %></h1>
@@ -72,11 +78,15 @@
         <!-- Like & bookmark bar -->
         <div class="interaction-bar" style="flex-wrap:wrap;">
             <% if (user) { %>
-                <button id="likeBtn" class="pill-btn <%= liked ? 'like-active' : '' %>" type="button">
+                <button id="likeBtn" class="pill-btn <%= liked ? 'like-active' : '' %>" type="button"
+                        aria-pressed="<%= liked ? 'true' : 'false' %>"
+                        aria-label="<%= liked ? 'Unlike this post' : 'Like this post' %>">
                     ❤ <span id="likeLabel"><%= liked ? 'Liked' : 'Like' %></span>
                     <span id="likeCount" class="pill-count">(<%= likeCount %>)</span>
                 </button>
-                <button id="bookmarkBtn" class="pill-btn <%= bookmarked ? 'bookmark-active' : '' %>" type="button">
+                <button id="bookmarkBtn" class="pill-btn <%= bookmarked ? 'bookmark-active' : '' %>" type="button"
+                        aria-pressed="<%= bookmarked ? 'true' : 'false' %>"
+                        aria-label="<%= bookmarked ? 'Remove bookmark' : 'Bookmark this post' %>">
                     🔖 <span id="bookmarkLabel"><%= bookmarked ? 'Saved' : 'Save' %></span>
                 </button>
             <% } else { %>

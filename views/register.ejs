@@ -13,9 +13,9 @@
 
 <%- include('partials/header', { page: 'register' }) %>
 
-<main role="main" style="flex-grow:1; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
-    <span class="icon-slot" style="top:14%; right:8%; width:56px; height:56px; opacity:0.08;"><svg viewBox="0 0 32 32"><use href="#icon-balloon"></use></svg></span>
-    <span class="icon-slot" style="bottom:12%; left:10%; width:50px; height:50px; opacity:0.08;"><svg viewBox="0 0 32 32"><use href="#icon-backpack"></use></svg></span>
+<main id="main-content" role="main" style="flex-grow:1; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+    <span class="icon-slot" style="top:14%; right:8%; width:56px; height:56px; opacity:0.08;" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-balloon"></use></svg></span>
+    <span class="icon-slot" style="bottom:12%; left:10%; width:50px; height:50px; opacity:0.08;" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-backpack"></use></svg></span>
     <div class="form-page">
         <section class="form-card">
             <h1>Create an account</h1>
@@ -35,8 +35,8 @@
                     <input type="password" id="password" name="password" required aria-required="true" placeholder="min. 6 characters">
                 </div>
 
-                <p id="registerError" class="alert alert-error hidden"></p>
-                <p id="registerSuccess" class="alert alert-success hidden"></p>
+                <p id="registerError" class="alert alert-error hidden" role="alert"></p>
+                <p id="registerSuccess" class="alert alert-success hidden" role="status"></p>
 
                 <div class="form-actions">
                     <button type="submit" class="btn" style="width:100%;">Create account</button>

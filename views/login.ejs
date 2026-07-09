@@ -13,9 +13,9 @@
 
 <%- include('partials/header', { page: 'login' }) %>
 
-<main role="main" style="flex-grow:1; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
-    <span class="icon-slot" style="top:12%; left:8%; width:56px; height:56px; opacity:0.08;"><svg viewBox="0 0 32 32"><use href="#icon-train"></use></svg></span>
-    <span class="icon-slot" style="bottom:14%; right:10%; width:50px; height:50px; opacity:0.08;"><svg viewBox="0 0 32 32"><use href="#icon-summit"></use></svg></span>
+<main id="main-content" role="main" style="flex-grow:1; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+    <span class="icon-slot" style="top:12%; left:8%; width:56px; height:56px; opacity:0.08;" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-train"></use></svg></span>
+    <span class="icon-slot" style="bottom:14%; right:10%; width:50px; height:50px; opacity:0.08;" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-summit"></use></svg></span>
     <div class="form-page">
         <section class="form-card">
             <h1>Welcome back</h1>
@@ -31,7 +31,7 @@
                     <input type="password" id="password" name="password" required aria-required="true" placeholder="••••••••">
                 </div>
 
-                <p id="loginError" class="alert alert-error" style="display:none;"></p>
+                <p id="loginError" class="alert alert-error" style="display:none;" role="alert"></p>
 
                 <div class="form-actions">
                     <button type="submit" class="btn" style="width:100%;">Log in</button>

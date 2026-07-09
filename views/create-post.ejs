@@ -15,7 +15,7 @@
 
 <%- include('partials/header', { page: '' }) %>
 
-<main role="main" class="container" style="max-width:720px; padding-top: var(--space-6); padding-bottom: var(--space-8);">
+<main id="main-content" role="main" class="container" style="max-width:720px; padding-top: var(--space-6); padding-bottom: var(--space-8);">
 
     <h1 style="font-size:28px; margin-bottom: var(--space-6);">
         <%= typeof post !== 'undefined' ? 'Edit post' : 'Create a new post' %>
@@ -70,8 +70,8 @@
             <input type="hidden" id="content" name="content">
         </div>
 
-        <p id="formError" class="alert alert-error hidden"></p>
-        <p id="formSuccess" class="alert alert-success hidden"></p>
+        <p id="formError" class="alert alert-error hidden" role="alert"></p>
+        <p id="formSuccess" class="alert alert-success hidden" role="status"></p>
 
         <div class="form-actions">
             <button type="submit" class="btn btn-lg">
