@@ -3,6 +3,18 @@ const User = require('../models/User');
 const Comment = require('../models/Comment');
 const Like = require('../models/Like');
 const Bookmark = require('../models/Bookmark');
+const Stamp = require('../models/Stamp');
+const sanitizeHtml = require('sanitize-html');
+
+const ALLOWED_HTML = {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h2', 'h3', 'u', 'img']),
+    allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        img: ['src', 'alt'],
+        a: ['href', 'name', 'target', 'rel'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
+};
 
 const home = async (req, res) => {
     try {
@@ -64,6 +76,8 @@ const postDetail = async (req, res) => {
         if (!post) return res.status(404).render('404');
         await Post.incrementViews(post.id);
 
+        post.content = sanitizeHtml(post.content, ALLOWED_HTML);
+
         const comments = await Comment.getByPost(post.id);
 
         let liked = false;
@@ -87,8 +101,13 @@ const userProfilePage = async (req, res) => {
     try {
         const profileUser = await User.getById(id);
         if (!profileUser) return res.status(404).render('404');
+
         const posts = await Post.getByUser(id);
-        res.render('profile', { profileUser, posts });
+
+        // Fetch stamps
+        const passportStamps = await Stamp.getAllForUser(id);
+
+        res.render('profile', { profileUser, posts, passportStamps });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error loading profile');

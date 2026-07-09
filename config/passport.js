@@ -30,7 +30,10 @@ module.exports = function(passport) {
     passport.deserializeUser(async (id, done) => {
         try {
             const [users] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
-            done(null, users[0]);
+            const user = users[0];
+            // Pass the full user object even when banned so the request middleware
+            // can detect the flag and redirect to /banned with proper context.
+            done(null, user || false);
         } catch (err) {
             done(err, null);
         }

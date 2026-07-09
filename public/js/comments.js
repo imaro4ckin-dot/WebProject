@@ -1,7 +1,7 @@
 /**
  * COMMENT HANDLER with Fetch API
  * Submits comments to the backend and renders them instantly.
- * Requires POST_ID and CURRENT_USER_ID to be defined in the page before this script loads.
+ * Requires POST_ID, CURRENT_USER_ID, and CURRENT_USERNAME to be defined in the page before this script loads.
  */
 function updateCommentCount(delta) {
     const heading = document.getElementById('commentsHeading');
@@ -59,7 +59,8 @@ function initComments() {
 
             if (response.ok) {
                 const data = await response.json();
-                renderComment("You", text, "Just now", list, data.commentId);
+                const displayName = typeof CURRENT_USERNAME !== 'undefined' ? CURRENT_USERNAME : 'You';
+                renderComment(displayName, text, "Just now", list, data.commentId);
                 updateCommentCount(+1);
                 const noComments = document.getElementById('noComments');
                 if (noComments) noComments.remove();

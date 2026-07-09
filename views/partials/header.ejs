@@ -14,11 +14,14 @@
             <li><a href="/contact" class="<%= page === 'contact' ? 'active' : '' %>">Contact</a></li>
 
             <% if (user) { %>
+                <% if (user.is_admin) { %>
+                    <li><a href="/admin" class="<%= page === 'admin' ? 'active' : '' %>" style="color:var(--accent);">⚙ Admin</a></li>
+                <% } %>
                 <li><a href="/posts/create" class="btn btn-sm">+ Write post</a></li>
                 <li>
                     <a href="/users/<%= user.id %>" style="display:flex; align-items:center; gap:8px; text-decoration:none; border-bottom:none;">
                         <span class="avatar" style="width:32px; height:32px; font-size:11px;">
-                            <img src="/Media/<%= user.profile_pic %>" alt="<%= user.username %>'s avatar">
+                            <img src="/Media/<%= user.profile_pic || 'default.jpg' %>" alt="<%= user.username %>'s avatar">
                         </span>
                         <span style="font-weight:600; color:var(--text);"><%= user.username %></span>
                     </a>
@@ -58,4 +61,100 @@
             navToggle.setAttribute('aria-expanded', isOpen);
         });
     }
+
+    // ── Easter egg: 5 rapid logo clicks → pixel dog trots across the screen ──
+    (function () {
+        const logo = document.querySelector('.logo');
+        if (!logo) return;
+
+        let clicks = 0;
+        let timer  = null;
+
+        // Inject the dog element once into the page
+        const dog = document.createElement('div');
+        dog.id = 'easter-dog';
+        dog.setAttribute('aria-hidden', 'true');
+        dog.innerHTML = `
+            <div class="dog-bubble" id="dog-bubble">Woof!</div>
+            <!-- 64×64 pixel-art dog drawn with SVG rects -->
+            <svg class="dog-sprite" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <!-- body -->
+                <rect x="4" y="7" width="7" height="4" fill="#C8860A"/>
+                <!-- head -->
+                <rect x="9" y="4" width="4" height="4" fill="#C8860A"/>
+                <!-- snout -->
+                <rect x="12" y="6" width="2" height="2" fill="#E8A030"/>
+                <!-- nose -->
+                <rect x="13" y="6" width="1" height="1" fill="#2a1a00"/>
+                <!-- eye -->
+                <rect x="11" y="5" width="1" height="1" fill="#2a1a00"/>
+                <!-- ear -->
+                <rect x="9"  y="3" width="2" height="2" fill="#A06508"/>
+                <!-- tail (animated separately) -->
+                <g class="dog-tail">
+                    <rect x="3" y="5" width="1" height="3" fill="#A06508"/>
+                </g>
+                <!-- legs (two visible from side) -->
+                <rect x="5"  y="11" width="1" height="2" fill="#A06508"/>
+                <rect x="8"  y="11" width="1" height="2" fill="#A06508"/>
+                <!-- paws -->
+                <rect x="5"  y="13" width="2" height="1" fill="#2a1a00"/>
+                <rect x="8"  y="13" width="2" height="1" fill="#2a1a00"/>
+            </svg>
+        `;
+        document.body.appendChild(dog);
+
+        const bubble = document.getElementById('dog-bubble');
+
+        function runDog() {
+            // Reset to off-screen left edge
+            dog.style.transition = 'none';
+            dog.style.left = '-80px';
+            bubble.classList.remove('visible');
+
+            // Small delay so the browser registers the reset before animating
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                const vw = window.innerWidth;
+
+                // Phase 1 — trot to centre (≈40 % across)
+                dog.style.transition = 'left 1.4s linear';
+                dog.style.left = Math.round(vw * 0.4) + 'px';
+
+                // Phase 2 — pause at centre, show bubble
+                setTimeout(() => {
+                    dog.style.transition = 'none';
+                    bubble.classList.add('visible');
+
+                    // Phase 3 — trot off the right edge
+                    setTimeout(() => {
+                        bubble.classList.remove('visible');
+                        dog.style.transition = 'left 1.2s linear';
+                        dog.style.left = (vw + 80) + 'px';
+                    }, 900);
+                }, 1450);
+            }));
+        }
+
+        logo.addEventListener('click', function (e) {
+            e.preventDefault();   // don't navigate while counting clicks
+
+            clicks++;
+            clearTimeout(timer);
+
+            if (clicks >= 5) {
+                clicks = 0;
+                runDog();
+            } else {
+                // Reset the counter if the 5th click doesn't arrive within 1.5 s
+                timer = setTimeout(() => {
+                    // Only navigate if we didn't reach 5 — let a single click still work
+                    if (clicks > 0 && clicks < 5) {
+                        clicks = 0;
+                        window.location.href = '/';
+                    }
+                    clicks = 0;
+                }, 1500);
+            }
+        });
+    })();
 </script>

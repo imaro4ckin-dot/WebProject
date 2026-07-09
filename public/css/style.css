@@ -103,6 +103,21 @@
     --footer-line: #322F3C;
     color-scheme: dark;
   }
+
+  /* Passport booklet dark overrides — must mirror [data-theme="dark"] below
+     so the correct colours apply on first load when the OS is in dark mode
+     but the user hasn't clicked the toggle yet (no data-theme attribute set). */
+  :root:not([data-theme="light"]) .passport-booklet {
+    background: #322F3C;
+    background-image:
+        linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 48%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 52%, rgba(0,0,0,0) 100%),
+        repeating-linear-gradient(45deg, #322F3C, #322F3C 4px, #2B2833 4px, #2B2833 8px);
+    border-color: #423D4C;
+    color: #F2EFE8;
+  }
+  :root:not([data-theme="light"]) .passport-booklet::before {
+    color: rgba(255, 255, 255, 0.05);
+  }
 }
 
 /* ...or forced explicitly via the toggle (data-theme="dark" on <html>) */
@@ -1199,3 +1214,169 @@ nav a.active  { background-size: 100% 2px; color: var(--text); font-weight: 600;
   footer .cols { gap: 32px; }
   .article-cover { height: 200px; }
 }
+
+/* --- DIGITAL PASSPORT - PIXEL ART STYLE --- */
+.passport-booklet {
+    /* Open booklet look: textured paper with a shadow crease in the middle */
+    background: #E8E5DF;
+    background-image:
+        linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 48%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0) 52%, rgba(0,0,0,0) 100%),
+        repeating-linear-gradient(45deg, #E8E5DF, #E8E5DF 4px, #DFDCD5 4px, #DFDCD5 8px);
+    border: 4px solid var(--text); /* Chunky pixel outline */
+    border-radius: 8px;
+    padding: 48px 32px 32px;
+    box-shadow:
+        inset -4px -4px 0px rgba(0,0,0,0.1),
+        8px 8px 0px rgba(0,0,0,0.08); /* Retro block shadow */
+    color: var(--text);
+    position: relative;
+}
+
+/* Watermark text at the top */
+.passport-booklet::before {
+    content: "PASSPORT";
+    position: absolute;
+    top: 16px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    color: rgba(58, 53, 66, 0.15);
+    letter-spacing: 8px;
+    pointer-events: none;
+}
+
+/* Dark mode overrides for the booklet */
+[data-theme="dark"] .passport-booklet {
+    background: var(--surface-2);
+    background-image:
+        linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 48%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 52%, rgba(0,0,0,0) 100%),
+        repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 4px, var(--surface) 4px, var(--surface) 8px);
+    border-color: var(--border);
+    color: var(--text);
+}
+[data-theme="dark"] .passport-booklet::before {
+    color: rgba(255, 255, 255, 0.05);
+}
+
+.stamp-wrapper {
+    text-align: center;
+    z-index: 1;
+}
+
+/* The Stamp Shape */
+.stamp-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto;
+    border: 4px dashed; /* Dashed looks more 8-bit than solid */
+    border-radius: 12px;
+    background: transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stamp-unlocked {
+    border-color: var(--accent);
+    color: var(--accent);
+    opacity: 1; /* Full opacity for readability */
+    box-shadow: 4px 4px 0px rgba(226, 105, 79, 0.15); /* Offset shadow */
+}
+
+.stamp-unlocked:hover {
+    transform: translateY(-4px) rotate(-4deg) !important;
+    box-shadow: 8px 8px 0px rgba(226, 105, 79, 0.15);
+}
+
+/* Force the pixel font inside the stamp */
+.stamp-unlocked h3,
+.stamp-locked h3 {
+    font-family: var(--font-pixel);
+    font-size: 10px;
+    line-height: 1.4;
+    margin: 12px 0 6px 0;
+}
+
+.stamp-unlocked p {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    margin: 0;
+    border-top: 2px dotted currentColor;
+    padding-top: 6px;
+}
+
+.stamp-locked {
+    border-color: var(--border);
+    color: var(--text-muted);
+    border-style: dotted;
+    opacity: 0.6;
+}
+
+/* ---------- EASTER EGG: pixel dog ---------- */
+#easter-dog {
+  position: fixed;
+  bottom: 0;
+  left: -120px;          /* starts off-screen to the left */
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: none;      /* JS handles motion */
+}
+
+/* speech bubble */
+#easter-dog .dog-bubble {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--text);
+  border-radius: 6px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  position: relative;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#easter-dog .dog-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--text);
+}
+#easter-dog .dog-bubble.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* pixel dog SVG wrapper — the walk cycle flips the sprite */
+#easter-dog .dog-sprite {
+  image-rendering: pixelated;
+  width: 64px;
+  height: 64px;
+}
+
+/* walking animation: bob up 1 px every other frame */
+@keyframes dogWalk {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-2px); }
+}
+#easter-dog .dog-sprite { animation: dogWalk 0.35s steps(1) infinite; }
+
+/* tail wag — rotates the tail path inside the SVG */
+@keyframes tailWag {
+  0%   { transform: rotate(0deg);   transform-origin: 4px 4px; }
+  50%  { transform: rotate(20deg);  transform-origin: 4px 4px; }
+  100% { transform: rotate(-10deg); transform-origin: 4px 4px; }
+}
+#easter-dog .dog-tail { animation: tailWag 0.4s ease-in-out infinite alternate; }

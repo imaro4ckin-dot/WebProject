@@ -1,4 +1,6 @@
+// controllers/postController.js
 const Post = require('../models/Post');
+const Stamp = require('../models/Stamp');
 
 const generateSlug = (title) =>
     title.toLowerCase()
@@ -31,6 +33,20 @@ const createPost = async (req, res) => {
 
     try {
         const postId = await Post.create(userId, title, slug, content, category, tags, image);
+        
+        // STAMP LOGIC
+        const textToCheck = `${title} ${tags || ''}`.toLowerCase();
+        
+        if (textToCheck.includes('spain') || textToCheck.includes('barcelona')) {
+            await Stamp.awardStamp(userId, 1);
+        }
+        if (textToCheck.includes('lithuania') || textToCheck.includes('vilnius')) {
+            await Stamp.awardStamp(userId, 2);
+        }
+        if (textToCheck.includes('germany') || textToCheck.includes('heidelberg')) {
+            await Stamp.awardStamp(userId, 3);
+        }
+
         res.status(201).json({ message: "Post created successfully!", postId, slug });
     } catch (error) {
         console.error("Error creating post:", error);
@@ -48,9 +64,16 @@ const updatePost = async (req, res) => {
         return res.status(400).json({ error: "Title, content and category are required." });
     }
 
-    const slug = generateSlug(title);
-
     try {
+        // Fetch the existing post so we can preserve the slug when the title hasn't changed
+        const existing = await Post.getForEdit(postId, userId);
+        if (!existing) {
+            return res.status(403).json({ error: "Not authorized to edit this post or post does not exist." });
+        }
+
+        // Only regenerate the slug when the title has actually changed
+        const slug = existing.title === title ? existing.slug : generateSlug(title);
+
         const affected = await Post.update(postId, userId, title, slug, content, category, tags, image);
         if (affected === 0) {
             return res.status(403).json({ error: "Not authorized to edit this post or post does not exist." });

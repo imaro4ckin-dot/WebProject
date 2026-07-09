@@ -8,6 +8,10 @@ const registerUser = async (req, res) => {
         return res.status(400).json({ error: "Missing required fields." });
     }
 
+    if (password.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters." });
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = await User.create(username, email, hashedPassword);

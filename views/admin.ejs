@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Budget Escapes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* ── Admin-only styles (scoped so they don't leak into global CSS) ── */
+        .admin-wrap { max-width: 1100px; margin: 0 auto; padding: var(--space-6) 24px var(--space-8); }
+
+        .admin-hero {
+            display: flex; align-items: center; gap: var(--space-4);
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-5);
+            border-bottom: 1px solid var(--border);
+        }
+        .admin-hero h1 { font-size: 22px; margin: 0; }
+        .admin-badge {
+            font-family: var(--font-pixel); font-size: 9px;
+            background: var(--accent); color: #fff;
+            padding: 4px 10px; border-radius: var(--radius-pill);
+        }
+
+        /* KPI tiles */
+        .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: var(--space-6); }
+        @media (max-width: 860px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 500px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+        .kpi-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4) var(--space-5);
+            text-align: center;
+        }
+        .kpi-card .kpi-num {
+            font-family: var(--font-pixel); font-size: 20px;
+            color: var(--accent); display: block; margin-bottom: 6px;
+        }
+        .kpi-card .kpi-label {
+            font-family: var(--font-mono); font-size: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        /* Section headings */
+        .admin-section { margin-bottom: var(--space-7); }
+        .admin-section-title {
+            font-family: var(--font-mono); font-size: 11px;
+            text-transform: uppercase; letter-spacing: 2px;
+            color: var(--text-muted); margin-bottom: var(--space-4);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .admin-section-title::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
+        }
+
+        /* Category bar chart */
+        .cat-bars { display: flex; flex-direction: column; gap: 10px; }
+        .cat-row { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+        .cat-row .cat-name {
+            font-family: var(--font-mono); font-size: 11px;
+            text-transform: uppercase; width: 80px; flex-shrink: 0;
+            color: var(--text-soft);
+        }
+        .cat-row .cat-bar-wrap { flex: 1; background: var(--surface-2); border-radius: 4px; height: 22px; overflow: hidden; }
+        .cat-row .cat-bar { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.6s ease; display: flex; align-items: center; padding-left: 8px; }
+        .cat-row .cat-count { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); width: 30px; text-align: right; flex-shrink: 0; }
+
+        /* Two-column layout for lower sections */
+        .admin-cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+        @media (max-width: 780px) { .admin-cols { grid-template-columns: 1fr; } }
+
+        /* Admin tables */
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .admin-table th {
+            font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--text-muted);
+            padding: 8px 10px; border-bottom: 1px solid var(--border);
+            text-align: left; white-space: nowrap;
+        }
+        .admin-table td {
+            padding: 9px 10px; border-bottom: 1px solid var(--border);
+            color: var(--text-soft); vertical-align: middle;
+        }
+        .admin-table tr:last-child td { border-bottom: none; }
+        .admin-table tr:hover td { background: var(--surface-2); }
+        .admin-table .td-title { color: var(--text); font-weight: 600; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .admin-table .td-num { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); text-align: right; }
+        .admin-table .td-muted { color: var(--text-muted); font-size: 12px; }
+
+        /* Inline action forms */
+        .action-form { display: inline; }
+        .btn-xs { font-size: 11px; padding: 4px 9px; }
+
+        /* Banned badge */
+        .badge-banned {
+            font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+            background: var(--danger-soft); color: var(--danger);
+            padding: 2px 7px; border-radius: var(--radius-pill);
+        }
+
+        /* Panel scroll for long tables */
+        .table-scroll { overflow-x: auto; }
+    </style>
+</head>
+<body style="display:flex; flex-direction:column; min-height:100vh; margin:0;">
+
+<%- include('partials/header', { page: '' }) %>
+
+<main id="main-content" role="main" class="admin-wrap">
+
+    <!-- Page title -->
+    <div class="admin-hero">
+        <span class="admin-badge">Admin</span>
+        <h1>Dashboard</h1>
+    </div>
+
+    <!-- ── 1. KPI tiles ─────────────────────────────────────────────── -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <span class="kpi-num"><%= stats.total_posts %></span>
+            <span class="kpi-label">Posts</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-num"><%= stats.total_users %></span>
+            <span class="kpi-label">Users</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-num"><%= stats.total_comments %></span>
+            <span class="kpi-label">Comments</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-num"><%= stats.total_likes %></span>
+            <span class="kpi-label">Likes</span>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-num"><%= stats.total_bookmarks %></span>
+            <span class="kpi-label">Bookmarks</span>
+        </div>
+    </div>
+
+    <!-- ── 2. Posts by category ─────────────────────────────────────── -->
+    <section class="admin-section">
+        <div class="admin-section-title">Posts by category</div>
+        <div class="article-panel" style="padding: var(--space-5);">
+            <div class="cat-bars">
+                <% postsByCategory.forEach(function(row) { %>
+                    <%
+                        const pct = maxCategoryCount > 0
+                            ? Math.round((row.count / maxCategoryCount) * 100)
+                            : 0;
+                    %>
+                    <div class="cat-row">
+                        <span class="cat-name"><%= row.category %></span>
+                        <div class="cat-bar-wrap">
+                            <div class="cat-bar" style="width:<%= pct %>%;">
+                                <% if (pct > 18) { %>
+                                    <span style="font-family:var(--font-mono);font-size:10px;color:#fff;"><%= row.count %></span>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% if (pct <= 18) { %>
+                            <span class="cat-count"><%= row.count %></span>
+                        <% } else { %>
+                            <span class="cat-count"></span>
+                        <% } %>
+                    </div>
+                <% }); %>
+                <% if (postsByCategory.length === 0) { %>
+                    <p style="color:var(--text-muted); font-size:13px;">No posts yet.</p>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 3. Top posts ─────────────────────────────────────────────── -->
+    <section class="admin-section" id="posts">
+        <div class="admin-section-title">Top posts by views</div>
+        <div class="article-panel" style="padding:0;">
+            <div class="table-scroll">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Views</th>
+                            <th>Likes</th>
+                            <th>Comments</th>
+                            <th>Published</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% topPosts.forEach(function(post) { %>
+                            <tr>
+                                <td class="td-title">
+                                    <a href="/posts/<%= post.slug %>" style="color:var(--text);text-decoration:none;" target="_blank">
+                                        <%= post.title %>
+                                    </a>
+                                </td>
+                                <td><a href="/users/<%= post.user_id %>" style="color:var(--accent-2);text-decoration:none;"><%= post.username %></a></td>
+                                <td><span class="tag" style="margin:0;"><%= post.category %></span></td>
+                                <td class="td-num"><%= post.views %></td>
+                                <td class="td-num"><%= post.like_count %></td>
+                                <td class="td-num"><%= post.comment_count %></td>
+                                <td class="td-muted"><%= new Date(post.created_at).toLocaleDateString('en-GB') %></td>
+                                <td>
+                                    <form class="action-form" method="POST" action="/admin/posts/<%= post.id %>/delete"
+                                          onsubmit="return confirm('Delete «<%= post.title.replace(/'/g, '') %>» permanently?')">
+                                        <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                        <% if (topPosts.length === 0) { %>
+                            <tr><td colspan="8" style="color:var(--text-muted);text-align:center;padding:24px;">No posts yet.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 4. Writers + Recent signups (two columns) ─────────────────── -->
+    <div class="admin-cols">
+
+        <!-- Most active writers -->
+        <section class="admin-section">
+            <div class="admin-section-title">Most active writers</div>
+            <div class="article-panel" style="padding:0;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>Posts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% writers.forEach(function(w, i) { %>
+                            <tr>
+                                <td class="td-muted"><%= i + 1 %></td>
+                                <td>
+                                    <a href="/users/<%= w.id %>" style="color:var(--accent-2);text-decoration:none;font-weight:600;">
+                                        <%= w.username %>
+                                    </a>
+                                </td>
+                                <td class="td-num"><%= w.post_count %></td>
+                            </tr>
+                        <% }); %>
+                        <% if (writers.length === 0) { %>
+                            <tr><td colspan="3" style="color:var(--text-muted);text-align:center;padding:20px;">No users yet.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Recent signups -->
+        <section class="admin-section" id="users">
+            <div class="admin-section-title">Recent signups</div>
+            <div class="article-panel" style="padding:0;">
+                <div class="table-scroll">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentUsers.forEach(function(u) { %>
+                                <tr>
+                                    <td>
+                                        <a href="/users/<%= u.id %>" style="color:var(--text);text-decoration:none;font-weight:600;">
+                                            <%= u.username %>
+                                        </a>
+                                        <div class="td-muted" style="font-size:11px;"><%= u.email %></div>
+                                    </td>
+                                    <td class="td-muted"><%= new Date(u.created_at).toLocaleDateString('en-GB') %></td>
+                                    <td>
+                                        <% if (u.is_banned) { %>
+                                            <span class="badge-banned">Banned</span>
+                                        <% } else { %>
+                                            <span style="font-family:var(--font-mono);font-size:10px;color:var(--success);">Active</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if (u.id !== user.id) { %>
+                                            <% if (u.is_banned) { %>
+                                                <form class="action-form" method="POST" action="/admin/users/<%= u.id %>/unban">
+                                                    <button type="submit" class="btn btn-outline btn-xs">Unban</button>
+                                                </form>
+                                            <% } else { %>
+                                                <form class="action-form" method="POST" action="/admin/users/<%= u.id %>/ban"
+                                                      onsubmit="return confirm('Ban <%= u.username %>?')">
+                                                    <button type="submit" class="btn btn-danger btn-xs">Ban</button>
+                                                </form>
+                                            <% } %>
+                                        <% } else { %>
+                                            <span class="td-muted" style="font-size:11px;">You</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                            <% if (recentUsers.length === 0) { %>
+                                <tr><td colspan="4" style="color:var(--text-muted);text-align:center;padding:20px;">No users yet.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ── 5. Recent comments ────────────────────────────────────────── -->
+    <section class="admin-section" id="comments">
+        <div class="admin-section-title">Recent comments</div>
+        <div class="article-panel" style="padding:0;">
+            <div class="table-scroll">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Comment</th>
+                            <th>Author</th>
+                            <th>Post</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% recentComments.forEach(function(c) { %>
+                            <tr>
+                                <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                    <%= c.body.length > 80 ? c.body.slice(0, 80) + '…' : c.body %>
+                                </td>
+                                <td>
+                                    <a href="/users/<%= c.user_id %>" style="color:var(--accent-2);text-decoration:none;">
+                                        <%= c.username %>
+                                    </a>
+                                </td>
+                                <td class="td-title" style="max-width:160px;">
+                                    <a href="/posts/<%= c.post_slug %>" style="color:var(--text);text-decoration:none;" target="_blank">
+                                        <%= c.post_title %>
+                                    </a>
+                                </td>
+                                <td class="td-muted"><%= new Date(c.created_at).toLocaleDateString('en-GB') %></td>
+                                <td>
+                                    <form class="action-form" method="POST" action="/admin/comments/<%= c.id %>/delete"
+                                          onsubmit="return confirm('Delete this comment?')">
+                                        <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                        <% if (recentComments.length === 0) { %>
+                            <tr><td colspan="5" style="color:var(--text-muted);text-align:center;padding:24px;">No comments yet.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<%- include('partials/footer') %>
+<script src="/js/script.js"></script>
+</body>
+</html>

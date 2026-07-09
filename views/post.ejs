@@ -148,6 +148,8 @@
 
 <script>
     const POST_ID = <%= post.id %>;
+    const CURRENT_USER_ID = <%= user ? user.id : 'null' %>;
+    const CURRENT_USERNAME = '<%= user ? user.username.replace(/'/g, "\\'") : '' %>';
 
     const deleteBtn = document.getElementById('deletePostBtn');
     if (deleteBtn) {

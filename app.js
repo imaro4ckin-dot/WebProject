@@ -4,6 +4,7 @@ const session = require('express-session');
 const passport = require('passport');
 require('dotenv').config();
 require('./config/passport')(passport);
+
  
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,12 +33,33 @@ app.use((req, res, next) => {
     res.locals.baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
     next();
 });
+
+// Redirect banned users to /banned for all page requests.
+// Allowed through: the banned page itself, logout (so they can sign out),
+// and all static assets so the banned page actually renders correctly.
+const BANNED_ALLOWLIST = ['/banned', '/contact', '/api/auth/logout'];
+app.use((req, res, next) => {
+    if (
+        req.user &&
+        req.user.is_banned &&
+        !BANNED_ALLOWLIST.includes(req.path) &&
+        !req.path.startsWith('/css') &&
+        !req.path.startsWith('/js') &&
+        !req.path.startsWith('/Media')
+    ) {
+        return res.redirect('/banned');
+    }
+    next();
+});
  
 // --- API Routes ---
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/auth',  require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
- 
+
+// --- Admin ---
+app.use('/admin', require('./routes/admin'));
+
 // --- Page Routes ---
 app.use('/', require('./routes/pages'));
  
@@ -47,6 +69,7 @@ app.get('/contact',  (req, res) => res.render('contact'));
 app.get('/book',     (req, res) => res.render('book'));
 app.get('/login',    (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
+app.get('/banned',   (req, res) => res.status(403).render('banned'));
  
 // --- 404 (must be last — catches anything not matched above) ---
 app.use((req, res) => {
