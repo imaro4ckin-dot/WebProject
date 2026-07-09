@@ -120,7 +120,8 @@
         <% if (user) { %>
             <form id="commentForm" style="border-top: 1px solid var(--border); padding-top: var(--space-5);">
                 <div class="field">
-                    <textarea id="userComment" rows="3" placeholder="Write a comment..." required></textarea>
+                    <label for="userComment">Leave a comment</label>
+                    <textarea id="userComment" name="userComment" rows="3" placeholder="Write a comment..." required aria-required="true"></textarea>
                 </div>
                 <button type="submit" class="btn">Post comment</button>
             </form>

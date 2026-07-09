@@ -55,7 +55,7 @@
             <label for="image">Featured image <span style="color:var(--text-muted); font-weight:400; text-transform:none;">(optional)</span></label>
             <% if (typeof post !== 'undefined' && post.image) { %>
                 <div class="current-image-preview">
-                    <img src="/Media/<%= post.image %>" alt="Current image">
+                    <img src="/Media/<%= post.image %>" alt="Current featured image for <%= post.title %>">
                     <p>Upload a new image to replace this one.</p>
                 </div>
             <% } %>
@@ -64,8 +64,8 @@
 
         <!-- Content — Quill editor -->
         <div class="field">
-            <label>Content <span style="color:var(--danger);">*</span></label>
-            <div id="quillEditor"></div>
+            <label id="contentLabel">Content <span style="color:var(--danger);">*</span></label>
+            <div id="quillEditor" aria-labelledby="contentLabel" role="textbox" aria-multiline="true"></div>
             <!-- Hidden input that holds the HTML for form submission -->
             <input type="hidden" id="content" name="content">
         </div>
