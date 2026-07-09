@@ -20,4 +20,12 @@ const create = async (postId, userId, body) => {
     return result.insertId;
 };
 
-module.exports = { getByPost, create };
+const remove = async (commentId, userId) => {
+    const [result] = await db.query(
+        'DELETE FROM comments WHERE id = ? AND user_id = ?',
+        [commentId, userId]
+    );
+    return result.affectedRows;
+};
+
+module.exports = { getByPost, create, remove };

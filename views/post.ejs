@@ -61,6 +61,14 @@
             <%- post.content %>
         </div>
 
+        <% if (post.tags) { %>
+            <div class="article-tags" style="margin-top: var(--space-5); display:flex; flex-wrap:wrap; gap:var(--space-2);">
+                <% post.tags.split(',').map(t => t.trim()).filter(Boolean).forEach(function(tag) { %>
+                    <span class="tag" style="font-size:12px;">#<%= tag %></span>
+                <% }) %>
+            </div>
+        <% } %>
+
         <!-- Like & bookmark bar -->
         <div class="interaction-bar" style="flex-wrap:wrap;">
             <% if (user) { %>
@@ -88,18 +96,21 @@
 
     <!-- Comments section -->
     <section class="article-panel">
-        <h3 style="font-size:20px; margin-bottom: var(--space-5);">Comments (<%= comments.length %>)</h3>
+        <h3 id="commentsHeading" style="font-size:20px; margin-bottom: var(--space-5);">Comments (<%= comments.length %>)</h3>
 
         <div id="commentList" style="margin-bottom: var(--space-6);">
             <% if (comments.length === 0) { %>
                 <p id="noComments" style="color:var(--text-muted); font-style:italic;">No comments yet. Share your thoughts!</p>
             <% } %>
             <% comments.forEach(function(c) { %>
-                <div class="comment">
+                <div class="comment" data-comment-id="<%= c.id %>">
                     <div class="avatar"><%= c.username.charAt(0).toUpperCase() %></div>
                     <div class="comment-body">
                         <strong><a href="/users/<%= c.user_id %>" style="text-decoration:none; color:var(--text);"><%= c.username %></a></strong>
                         <span class="meta"><%= new Date(c.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+                        <% if (user && user.id === c.user_id) { %>
+                            <button class="delete-comment-btn btn btn-danger btn-sm" style="float:right; margin-top:-2px;" data-comment-id="<%= c.id %>">Delete</button>
+                        <% } %>
                         <p><%= c.body %></p>
                     </div>
                 </div>

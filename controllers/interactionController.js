@@ -65,4 +65,17 @@ const toggleBookmark = async (req, res) => {
     }
 };
 
-module.exports = { addComment, getComments, toggleLike, toggleBookmark };
+const deleteComment = async (req, res) => {
+    const commentId = req.params.commentId;
+    const userId = req.user.id;
+    try {
+        const affected = await Comment.remove(commentId, userId);
+        if (affected === 0) return res.status(403).json({ error: "Not allowed or comment not found." });
+        res.json({ message: "Comment deleted." });
+    } catch (error) {
+        console.error("Error deleting comment:", error.message);
+        res.status(500).json({ error: "Failed to delete comment." });
+    }
+};
+
+module.exports = { addComment, getComments, toggleLike, toggleBookmark, deleteComment };

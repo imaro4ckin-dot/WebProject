@@ -13,22 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.status === 401) { window.location.href = '/login'; return; }
             if (!res.ok) return;
 
-            const data = await res.json();
-            const label     = document.getElementById('likeLabel');
-            const countEl   = document.getElementById('likeCount');
-            const isLiked   = likeBtn.classList.contains('bg-blue-600');
+            const label   = document.getElementById('likeLabel');
+            const countEl = document.getElementById('likeCount');
+            const isLiked = likeBtn.dataset.liked === 'true';
 
             if (isLiked) {
-                // Unlike
-                likeBtn.classList.replace('bg-blue-600', 'bg-blue-100');
-                likeBtn.classList.replace('text-white', 'text-blue-800');
+                likeBtn.dataset.liked = 'false';
+                likeBtn.className = likeBtn.className
+                    .replace('bg-terracotta text-white border-terracotta', 'bg-white text-stone-600 border-stone-200 hover:border-terracotta hover:text-terracotta');
                 label.textContent = 'Like';
                 const current = parseInt(countEl.textContent.replace(/\D/g, ''));
                 countEl.textContent = `(${Math.max(0, current - 1)})`;
             } else {
-                // Like
-                likeBtn.classList.replace('bg-blue-100', 'bg-blue-600');
-                likeBtn.classList.replace('text-blue-800', 'text-white');
+                likeBtn.dataset.liked = 'true';
+                likeBtn.className = likeBtn.className
+                    .replace('bg-white text-stone-600 border-stone-200 hover:border-terracotta hover:text-terracotta', 'bg-terracotta text-white border-terracotta');
                 label.textContent = 'Liked';
                 const current = parseInt(countEl.textContent.replace(/\D/g, ''));
                 countEl.textContent = `(${current + 1})`;
@@ -42,16 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.status === 401) { window.location.href = '/login'; return; }
             if (!res.ok) return;
 
-            const label     = document.getElementById('bookmarkLabel');
-            const isBookmarked = bookmarkBtn.classList.contains('bg-yellow-400');
+            const label        = document.getElementById('bookmarkLabel');
+            const isBookmarked = bookmarkBtn.dataset.bookmarked === 'true';
 
             if (isBookmarked) {
-                bookmarkBtn.classList.replace('bg-yellow-400', 'bg-yellow-100');
-                bookmarkBtn.classList.replace('text-white', 'text-yellow-800');
+                bookmarkBtn.dataset.bookmarked = 'false';
+                bookmarkBtn.className = bookmarkBtn.className
+                    .replace('bg-forest text-white border-forest', 'bg-white text-stone-600 border-stone-200 hover:border-forest hover:text-forest');
                 label.textContent = 'Save';
             } else {
-                bookmarkBtn.classList.replace('bg-yellow-100', 'bg-yellow-400');
-                bookmarkBtn.classList.replace('text-yellow-800', 'text-white');
+                bookmarkBtn.dataset.bookmarked = 'true';
+                bookmarkBtn.className = bookmarkBtn.className
+                    .replace('bg-white text-stone-600 border-stone-200 hover:border-forest hover:text-forest', 'bg-forest text-white border-forest');
                 label.textContent = 'Saved';
             }
         });

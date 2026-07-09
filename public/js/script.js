@@ -3,23 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // 1. Mobile Menu Toggle
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
+    const menuToggle  = document.getElementById('mobile-menu-btn');
+    const mobileMenu  = document.getElementById('mobile-menu');
 
-    if (menuToggle && navLinks) {
+    if (menuToggle && mobileMenu) {
         menuToggle.addEventListener('click', () => {
-            // Toggle Tailwind classes to show/hide and style the mobile dropdown menu
-            navLinks.classList.toggle('hidden');
-            navLinks.classList.toggle('flex');
-            navLinks.classList.toggle('flex-col');
-            navLinks.classList.toggle('absolute');
-            navLinks.classList.toggle('top-16');
-            navLinks.classList.toggle('left-0');
-            navLinks.classList.toggle('w-full');
-            navLinks.classList.toggle('bg-blue-800');
-            navLinks.classList.toggle('p-4');
-
-            // Update the aria-expanded attribute for screen reader accessibility
+            mobileMenu.classList.toggle('hidden');
             const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
             menuToggle.setAttribute('aria-expanded', !isExpanded);
         });
@@ -63,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeLightboxBtn = document.querySelector('.close-lightbox');
-    const triggers = document.querySelectorAll('.lightbox-trigger');
+    const triggers = document.querySelectorAll('.gallery-img');
 
     // Attach click and keyboard events to all  images
     triggers.forEach(trigger => {
