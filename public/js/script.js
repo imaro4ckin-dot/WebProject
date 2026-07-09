@@ -1,6 +1,46 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ─── Scroll-reveal (IntersectionObserver) ────────────────────────────────
+    // Cards and sections get a .reveal class added via JS so they only animate
+    // when they actually enter the viewport, not on first paint.
+    const revealEls = document.querySelectorAll('.card, .team-card, .spotlight, .contact-panel');
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    // stagger siblings by 80 ms each
+                    const siblings = Array.from(entry.target.parentElement.children);
+                    const idx = siblings.indexOf(entry.target);
+                    entry.target.style.transitionDelay = `${idx * 80}ms`;
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealEls.forEach(el => {
+            el.classList.add('reveal');
+            observer.observe(el);
+        });
+    } else {
+        // Fallback: just show everything
+        revealEls.forEach(el => el.classList.add('is-visible', 'reveal'));
+    }
+
+    // ─── Card 3-D tilt on mouse move ─────────────────────────────────────────
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width  - 0.5; // -0.5 … 0.5
+            const y = (e.clientY - rect.top)  / rect.height - 0.5;
+            card.style.transform = `translateY(-4px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+
 
     // 1. Mobile Menu Toggle
     const menuToggle  = document.getElementById('mobile-menu-btn');
@@ -52,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeLightboxBtn = document.querySelector('.close-lightbox');
-    const triggers = document.querySelectorAll('.gallery-img');
+    const triggers = document.querySelectorAll('.lightbox-trigger, .gallery-img');
 
     // Attach click and keyboard events to all  images
     triggers.forEach(trigger => {

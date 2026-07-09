@@ -1026,7 +1026,154 @@ footer .col a:hover { color: var(--accent); }
 .mt-0 { margin-top: 0; }
 .mb-0 { margin-bottom: 0; }
 
-/* ---------- 20. RESPONSIVE ---------- */
+/* ---------- 20. ANIMATIONS ---------- */
+
+/* --- Keyframes --- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes popIn {
+  0%   { transform: scale(0.85); opacity: 0; }
+  70%  { transform: scale(1.06); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+@keyframes shimmer {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.65; }
+  100% { opacity: 1; }
+}
+@keyframes ringPulse {
+  0%   { box-shadow: 0 0 0 0 var(--accent-soft); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@keyframes pillPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.18); }
+  65%  { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+@keyframes chipBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes alertSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Page-load entrance --- */
+/* Hero text */
+.hero .eyebrow  { animation: fadeInDown 0.5s ease both; }
+.hero h1        { animation: fadeInUp   0.55s 0.1s ease both; }
+.hero p         { animation: fadeInUp   0.55s 0.22s ease both; }
+.hero .btn      { animation: fadeInUp   0.55s 0.34s ease both; }
+
+/* Hero highlight floats */
+.hero h1 .hl { animation: fadeInUp 0.55s 0.1s ease both, float 4s 0.8s ease-in-out infinite; }
+
+/* Page-intro (destinations, book, contact) */
+.page-intro .eyebrow { animation: fadeInDown 0.45s ease both; }
+.page-intro h1       { animation: fadeInUp   0.5s 0.1s ease both; }
+.page-intro p        { animation: fadeInUp   0.5s 0.2s ease both; }
+
+/* Article panel slides up on load */
+.article-panel { animation: fadeInUp 0.5s ease both; }
+.article-panel + .article-panel { animation-delay: 0.12s; }
+
+/* Form cards */
+.form-card { animation: fadeInUp 0.45s ease both; }
+
+/* Profile header */
+.profile-header { animation: fadeInUp 0.45s ease both; }
+
+/* --- Scroll-reveal (JS adds .is-visible via IntersectionObserver) --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Card hover: lift + subtle tilt --- */
+.card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+/* tilt is applied via JS; keep the existing hover lift */
+.card:hover { transform: translateY(-4px) rotate3d(1, 0, 0, 1.5deg); }
+
+/* --- Team card hover tilt (about page) --- */
+.team-card:hover {
+  transform: translateY(-4px) rotate3d(0, 1, 0, 3deg);
+  box-shadow: var(--shadow-card);
+}
+
+/* --- Logo shimmer on hover --- */
+.logo:hover { animation: shimmer 1s ease; }
+
+/* --- Nav link underline glide --- */
+nav a {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 2px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  transition: color 0.15s, background-size 0.25s ease, border-color 0.15s;
+  border-bottom: none !important; /* replaced by bg gradient */
+  padding-bottom: 4px;
+}
+nav a:hover   { background-size: 100% 2px; color: var(--accent); }
+nav a.active  { background-size: 100% 2px; color: var(--text); font-weight: 600; }
+
+/* --- Filter chips bounce when activated --- */
+.filter-chip.active { animation: chipBounce 0.3s ease; }
+
+/* --- Like / bookmark pop on toggle --- */
+.pill-btn.like-active,
+.pill-btn.bookmark-active { animation: pillPop 0.35s ease; }
+
+/* --- Theme toggle spin --- */
+.theme-toggle { transition: color 0.15s, border-color 0.15s, transform 0.3s ease; }
+.theme-toggle:hover { transform: rotate(20deg); }
+
+/* --- Profile avatar ring pulse on hover --- */
+.profile-header .avatar:hover { animation: ringPulse 0.6s ease; }
+
+/* --- Alert messages animate in --- */
+.alert:not(.hidden) { animation: alertSlideIn 0.3s ease both; }
+
+/* --- Lightbox fade in/out --- */
+.lightbox:not(.hidden) { animation: fadeIn 0.2s ease both; }
+.lightbox:not(.hidden) img { animation: popIn 0.3s ease both; }
+
+/* --- Breadcrumb fade in --- */
+.breadcrumb { animation: fadeInDown 0.4s ease both; }
+
+/* --- Spotlight section slide in on scroll --- */
+.spotlight { transition: opacity 0.6s ease, transform 0.6s ease; }
+
+/* ---------- 21. RESPONSIVE ---------- */
 @media (max-width: 780px) {
   header.site-header { padding: 14px 20px; }
   nav ul {
