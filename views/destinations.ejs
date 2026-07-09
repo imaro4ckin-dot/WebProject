@@ -93,7 +93,7 @@
                             </span>
                             <h3><%= post.title %></h3>
                             <p class="byline">by <a href="/users/<%= post.user_id %>"><%= post.username %></a></p>
-                            <a href="/posts/<%= post.id %>" aria-label="Read full post: <%= post.title %>" class="read-more">Read full post →</a>
+                            <a href="/posts/<%= post.slug %>" aria-label="Read full post: <%= post.title %>" class="read-more">Read full post →</a>
                         </div>
                     </article>
                 <% }) %>

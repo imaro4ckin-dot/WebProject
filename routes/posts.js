@@ -23,6 +23,7 @@ router.delete('/:id', ensureAuthenticated, postController.deletePost);
 
 router.get('/:id/comments', interactionController.getComments);
 router.post('/:id/comments', ensureAuthenticated, interactionController.addComment);
+router.delete('/:id/comments/:commentId', ensureAuthenticated, interactionController.deleteComment);
 router.post('/:id/like', ensureAuthenticated, interactionController.toggleLike);
 router.post('/:id/bookmark', ensureAuthenticated, interactionController.toggleBookmark);
 

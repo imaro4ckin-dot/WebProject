@@ -67,4 +67,17 @@ const getForEdit = async (postId, userId) => {
     return rows[0] || null;
 };
 
-module.exports = { getLatest, getAll, getById, incrementViews, create, update, remove, getByUser, getForEdit };
+const getBySlug = async (slug) => {
+    const [rows] = await db.query(
+        'SELECT posts.*, users.username, users.profile_pic FROM posts JOIN users ON posts.user_id = users.id WHERE posts.slug = ?',
+        [slug]
+    );
+    return rows[0] || null;
+};
+
+const getForEditBySlug = async (slug, userId) => {
+    const [rows] = await db.query('SELECT * FROM posts WHERE slug = ? AND user_id = ?', [slug, userId]);
+    return rows[0] || null;
+};
+
+module.exports = { getLatest, getAll, getById, getBySlug, incrementViews, create, update, remove, getByUser, getForEdit, getForEditBySlug };

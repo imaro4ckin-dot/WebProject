@@ -47,7 +47,7 @@
             </div>
             <% if (user && user.id === post.user_id) { %>
                 <div class="article-owner-actions">
-                    <a href="/posts/<%= post.id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+                    <a href="/posts/<%= post.slug %>/edit" class="btn btn-outline btn-sm">Edit</a>
                     <button id="deletePostBtn" class="btn btn-danger btn-sm" type="button">Delete</button>
                 </div>
             <% } %>
@@ -60,6 +60,14 @@
         <div class="article-body">
             <%- post.content %>
         </div>
+
+        <% if (post.tags) { %>
+            <div class="article-tags" style="margin-top: var(--space-5); display:flex; flex-wrap:wrap; gap:var(--space-2);">
+                <% post.tags.split(',').map(t => t.trim()).filter(Boolean).forEach(function(tag) { %>
+                    <span class="tag" style="font-size:12px;">#<%= tag %></span>
+                <% }) %>
+            </div>
+        <% } %>
 
         <!-- Like & bookmark bar -->
         <div class="interaction-bar" style="flex-wrap:wrap;">
@@ -78,9 +86,9 @@
             <% } %>
 
             <div class="share-links">
-                <a href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(post.title) %>&url=<%= encodeURIComponent(baseUrl + '/posts/' + post.id) %>"
+                <a href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(post.title) %>&url=<%= encodeURIComponent(baseUrl + '/posts/' + post.slug) %>"
                    target="_blank" rel="noopener" class="btn btn-outline btn-sm" aria-label="Share on Twitter">𝕏 Twitter</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(baseUrl + '/posts/' + post.id) %>"
+                <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(baseUrl + '/posts/' + post.slug) %>"
                    target="_blank" rel="noopener" class="btn btn-outline btn-sm" aria-label="Share on Facebook">Facebook</a>
             </div>
         </div>
@@ -88,18 +96,21 @@
 
     <!-- Comments section -->
     <section class="article-panel">
-        <h3 style="font-size:20px; margin-bottom: var(--space-5);">Comments (<%= comments.length %>)</h3>
+        <h3 id="commentsHeading" style="font-size:20px; margin-bottom: var(--space-5);">Comments (<%= comments.length %>)</h3>
 
         <div id="commentList" style="margin-bottom: var(--space-6);">
             <% if (comments.length === 0) { %>
                 <p id="noComments" style="color:var(--text-muted); font-style:italic;">No comments yet. Share your thoughts!</p>
             <% } %>
             <% comments.forEach(function(c) { %>
-                <div class="comment">
+                <div class="comment" data-comment-id="<%= c.id %>">
                     <div class="avatar"><%= c.username.charAt(0).toUpperCase() %></div>
                     <div class="comment-body">
                         <strong><a href="/users/<%= c.user_id %>" style="text-decoration:none; color:var(--text);"><%= c.username %></a></strong>
                         <span class="meta"><%= new Date(c.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+                        <% if (user && user.id === c.user_id) { %>
+                            <button class="delete-comment-btn btn btn-danger btn-sm" style="float:right; margin-top:-2px;" data-comment-id="<%= c.id %>">Delete</button>
+                        <% } %>
                         <p><%= c.body %></p>
                     </div>
                 </div>
@@ -109,7 +120,8 @@
         <% if (user) { %>
             <form id="commentForm" style="border-top: 1px solid var(--border); padding-top: var(--space-5);">
                 <div class="field">
-                    <textarea id="userComment" rows="3" placeholder="Write a comment..." required></textarea>
+                    <label for="userComment">Leave a comment</label>
+                    <textarea id="userComment" name="userComment" rows="3" placeholder="Write a comment..." required aria-required="true"></textarea>
                 </div>
                 <button type="submit" class="btn">Post comment</button>
             </form>

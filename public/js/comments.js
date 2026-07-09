@@ -1,19 +1,47 @@
 /**
  * COMMENT HANDLER with Fetch API
  * Submits comments to the backend and renders them instantly.
- * Requires POST_ID to be defined in the page before this script loads.
+ * Requires POST_ID and CURRENT_USER_ID to be defined in the page before this script loads.
  */
+function updateCommentCount(delta) {
+    const heading = document.getElementById('commentsHeading');
+    if (!heading) return;
+    const match = heading.textContent.match(/\d+/);
+    const current = match ? parseInt(match[0]) : 0;
+    const next = Math.max(0, current + delta);
+    heading.textContent = `Comments (${next})`;
+}
+
 function initComments() {
-    const form = document.getElementById('commentForm');
-    const list = document.getElementById('commentList');
+    const form   = document.getElementById('commentForm');
+    const list   = document.getElementById('commentList');
     const postId = typeof POST_ID !== 'undefined' ? POST_ID : null;
 
-    if (!form || !list || !postId) return;
+    if (!list || !postId) return;
+
+    // Delete comment (delegated listener)
+    list.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.delete-comment-btn');
+        if (!btn) return;
+        if (!confirm('Delete this comment?')) return;
+        const commentId = btn.dataset.commentId;
+        const res = await fetch(`/api/posts/${postId}/comments/${commentId}`, { method: 'DELETE' });
+        if (res.ok) {
+            const commentEl = document.querySelector(`.comment[data-comment-id="${commentId}"]`);
+            if (commentEl) commentEl.remove();
+            updateCommentCount(-1);
+        } else {
+            alert('Failed to delete comment.');
+        }
+    });
+
+    if (!form) return;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const commentInput = document.getElementById('userComment');
+        // Support both old id "userComment" and new id "commentBody"
+        const commentInput = document.getElementById('commentBody') || document.getElementById('userComment');
         const text = commentInput.value.trim();
         if (!text) return;
 
@@ -30,7 +58,9 @@ function initComments() {
             }
 
             if (response.ok) {
-                renderComment("You", text, "bg-blue-600", "Just now", list);
+                const data = await response.json();
+                renderComment("You", text, "Just now", list, data.commentId);
+                updateCommentCount(+1);
                 const noComments = document.getElementById('noComments');
                 if (noComments) noComments.remove();
                 form.reset();
@@ -44,21 +74,21 @@ function initComments() {
     });
 }
 
-function renderComment(name, text, color, time, list) {
+function renderComment(name, text, time, list, commentId) {
     const commentDiv = document.createElement('div');
-    commentDiv.className = "flex gap-4 border-b border-gray-100 pb-4";
+    commentDiv.className = 'comment';
+    commentDiv.dataset.commentId = commentId || '';
     commentDiv.innerHTML = `
-        <div class="w-10 h-10 ${color} rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0">
-            ${name.charAt(0).toUpperCase()}
-        </div>
-        <div class="flex-1">
-            <p class="font-bold text-gray-900">${name}
-                <span class="text-xs font-normal text-gray-500 ml-2">${time}</span>
-            </p>
-            <p class="text-gray-600">${text}</p>
+        <div class="avatar">${name.charAt(0).toUpperCase()}</div>
+        <div class="comment-body">
+            <strong>${name}</strong>
+            <span class="meta">${time}</span>
+            <button class="delete-comment-btn btn btn-danger btn-sm" style="float:right; margin-top:-2px;" data-comment-id="${commentId || ''}">Delete</button>
+            <p>${text}</p>
         </div>
     `;
     list.prepend(commentDiv);
 }
 
 document.addEventListener('DOMContentLoaded', initComments);
+
