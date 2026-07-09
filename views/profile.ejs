@@ -82,7 +82,7 @@
                             <span class="tag"><%= post.category %></span>
                             <h3 style="font-size:16px;"><%= post.title %></h3>
                             <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
-                                <a href="/posts/<%= post.id %>" class="read-more" style="font-size:13px;">Read →</a>
+                                <a href="/posts/<%= post.slug %>" class="read-more" style="font-size:13px;">Read →</a>
                                 <% if (user && user.id === profileUser.id) { %>
                                     <button onclick="deletePost(<%= post.id %>)" class="btn-ghost" style="margin-left:auto; font-size:13px; color:var(--text-muted);" type="button">Delete</button>
                                 <% } %>

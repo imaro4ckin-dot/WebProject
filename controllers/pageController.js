@@ -32,9 +32,16 @@ const createPostPage = (req, res) => {
 
 const editPostPage = async (req, res) => {
     if (!req.user) return res.redirect('/login');
-    const { id } = req.params;
+    const { slug } = req.params;
     try {
-        const post = await Post.getForEdit(id, req.user.id);
+        let post = await Post.getForEditBySlug(slug, req.user.id);
+
+        // Fallback: numeric ID in URL → redirect to slug-based edit URL
+        if (!post && /^\d+$/.test(slug)) {
+            const found = await Post.getForEdit(slug, req.user.id);
+            if (found) return res.redirect(301, `/posts/${found.slug}/edit`);
+        }
+
         if (!post) return res.status(403).render('404');
         res.render('create-post', { post });
     } catch (err) {
@@ -44,22 +51,29 @@ const editPostPage = async (req, res) => {
 };
 
 const postDetail = async (req, res) => {
-    const { id } = req.params;
+    const slug = decodeURIComponent(req.params.slug);
     try {
-        const post = await Post.getById(id);
-        if (!post) return res.status(404).render('404');
-        await Post.incrementViews(id);
+        let post = await Post.getBySlug(slug);
 
-        const comments = await Comment.getByPost(id);
+        // Fallback: if param is a numeric ID (old links), look up by ID and redirect
+        if (!post && /^\d+$/.test(slug)) {
+            post = await Post.getById(slug);
+            if (post) return res.redirect(301, `/posts/${post.slug}`);
+        }
+
+        if (!post) return res.status(404).render('404');
+        await Post.incrementViews(post.id);
+
+        const comments = await Comment.getByPost(post.id);
 
         let liked = false;
         let bookmarked = false;
         if (req.user) {
-            liked = await Like.check(id, req.user.id);
-            bookmarked = await Bookmark.check(id, req.user.id);
+            liked = await Like.check(post.id, req.user.id);
+            bookmarked = await Bookmark.check(post.id, req.user.id);
         }
 
-        const likeCount = await Like.count(id);
+        const likeCount = await Like.count(post.id);
 
         res.render('post', { post, comments, liked, bookmarked, likeCount });
     } catch (err) {

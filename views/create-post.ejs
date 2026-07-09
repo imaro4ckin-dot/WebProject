@@ -114,7 +114,7 @@
 
     <% const isEdit = typeof post !== 'undefined'; %>
     const isEdit = <%= isEdit %>;
-    const postId = isEdit ? <%= isEdit ? post.id : 'null' %> : null;
+    const postSlug = isEdit ? '<%= typeof post !== "undefined" && post.slug ? post.slug : "" %>' : null;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -131,7 +131,7 @@
         document.getElementById('content').value = html;
 
         const formData = new FormData(form);
-        const url    = isEdit ? `/api/posts/${postId}` : '/api/posts';
+        const url    = isEdit ? `/api/posts/<%= typeof post !== 'undefined' && post.id ? post.id : '' %>` : '/api/posts';
         const method = isEdit ? 'PUT' : 'POST';
 
         const res  = await fetch(url, { method, body: formData });
@@ -141,7 +141,7 @@
             successEl.textContent = isEdit ? 'Post updated!' : 'Post published!';
             successEl.classList.remove('hidden');
             setTimeout(() => {
-                window.location.href = isEdit ? `/posts/${postId}` : `/posts/${data.postId}`;
+                window.location.href = `/posts/${data.slug || postSlug}`;
             }, 800);
         } else {
             errorEl.textContent = data.error || 'Something went wrong.';

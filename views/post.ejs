@@ -47,7 +47,7 @@
             </div>
             <% if (user && user.id === post.user_id) { %>
                 <div class="article-owner-actions">
-                    <a href="/posts/<%= post.id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+                    <a href="/posts/<%= post.slug %>/edit" class="btn btn-outline btn-sm">Edit</a>
                     <button id="deletePostBtn" class="btn btn-danger btn-sm" type="button">Delete</button>
                 </div>
             <% } %>
@@ -86,9 +86,9 @@
             <% } %>
 
             <div class="share-links">
-                <a href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(post.title) %>&url=<%= encodeURIComponent(baseUrl + '/posts/' + post.id) %>"
+                <a href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(post.title) %>&url=<%= encodeURIComponent(baseUrl + '/posts/' + post.slug) %>"
                    target="_blank" rel="noopener" class="btn btn-outline btn-sm" aria-label="Share on Twitter">𝕏 Twitter</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(baseUrl + '/posts/' + post.id) %>"
+                <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(baseUrl + '/posts/' + post.slug) %>"
                    target="_blank" rel="noopener" class="btn btn-outline btn-sm" aria-label="Share on Facebook">Facebook</a>
             </div>
         </div>

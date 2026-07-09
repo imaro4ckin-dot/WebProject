@@ -31,7 +31,7 @@ const createPost = async (req, res) => {
 
     try {
         const postId = await Post.create(userId, title, slug, content, category, tags, image);
-        res.status(201).json({ message: "Post created successfully!", postId });
+        res.status(201).json({ message: "Post created successfully!", postId, slug });
     } catch (error) {
         console.error("Error creating post:", error);
         res.status(500).json({ error: "Failed to create post." });
@@ -55,7 +55,7 @@ const updatePost = async (req, res) => {
         if (affected === 0) {
             return res.status(403).json({ error: "Not authorized to edit this post or post does not exist." });
         }
-        res.status(200).json({ message: "Post updated successfully!" });
+        res.status(200).json({ message: "Post updated successfully!", slug });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to update post." });
