@@ -1,6 +1,6 @@
 # Student Budget Escapes
 
-A full-stack travel blog platform for university students to share and discover budget-friendly weekend adventures. Built with Node.js, Express, MySQL, and EJS templates.
+A full-stack travel blog platform for university students to share and discover budget-friendly weekend adventures. Built with Node.js, Express, PostgreSQL, and EJS templates.
 
 Developed as the final project for the **Web Engineering 2** course.
 
@@ -29,7 +29,7 @@ Developed as the final project for the **Web Engineering 2** course.
 | Layer | Technology |
 |---|---|
 | Backend | Node.js, Express.js 5 |
-| Database | MySQL 8 |
+| Database | PostgreSQL (hosted on Supabase) |
 | Frontend | EJS templates, custom CSS design system (`public/css/style.css`) |
 | Authentication | Passport.js (local strategy) |
 | Rich Text Editor | Quill.js 1.3.7 (CDN) |
@@ -42,7 +42,7 @@ Developed as the final project for the **Web Engineering 2** course.
 ## Prerequisites
 
 - Node.js 18+
-- MySQL 8
+- A [Supabase](https://supabase.com) project (free tier works)
 
 ---
 
@@ -72,9 +72,11 @@ cp .env.example .env
 Edit `.env`:
 
 ```
-DATABASE_URL=mysql://your_user:your_password@localhost:3306/student_budget_escapes
+DATABASE_URL=postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
 SESSION_SECRET=some_long_random_string
 ```
+
+Get your `DATABASE_URL` from: Supabase project → **Settings → Database → Connection string → Transaction pooler → URI**
 
 Generate a strong session secret with:
 
@@ -82,13 +84,7 @@ Generate a strong session secret with:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### 4. Create the database
-
-```sql
-CREATE DATABASE student_budget_escapes;
-```
-
-### 5. Run the setup script
+### 4. Run the setup script
 
 Creates all tables and seeds the passport stamps:
 
@@ -96,7 +92,7 @@ Creates all tables and seeds the passport stamps:
 node models/setup.js
 ```
 
-### 6. Start the server
+### 5. Start the server
 
 ```bash
 npm start
@@ -108,12 +104,12 @@ The app runs at `http://localhost:3000`.
 
 ## Admin Dashboard
 
-### Setup (run once in your MySQL client, one statement at a time)
+### Grant admin access
+
+Run this in the **Supabase SQL Editor** (replace `your_username` with your actual username):
 
 ```sql
-ALTER TABLE users ADD COLUMN is_admin  TINYINT(1) DEFAULT 0;
-ALTER TABLE users ADD COLUMN is_banned TINYINT(1) DEFAULT 0;
-UPDATE users SET is_admin = 1 WHERE username = 'your_username';
+UPDATE users SET is_admin = true WHERE username = 'your_username';
 ```
 
 ### Accessing the dashboard
@@ -155,7 +151,7 @@ WebProject/
 │   ├── authMiddleware.js           # ensureAuthenticated
 │   └── adminMiddleware.js          # ensureAdmin (redirects banned + non-admin)
 ├── models/
-│   ├── db.js                       # MySQL connection pool
+│   ├── db.js                       # PostgreSQL connection pool (pg)
 │   ├── setup.js                    # Schema creation + stamp seeding script
 │   ├── Admin.js                    # Analytics queries + moderation mutations
 │   ├── User.js                     # User queries
@@ -219,7 +215,7 @@ WebProject/
 
 ## Architecture
 
-- **Models** — `models/db.js` exposes a `mysql2` promise pool; each model file contains focused query functions for one resource. `Admin.js` handles all analytics and moderation queries.
+- **Models** — `models/db.js` exposes a `pg` connection pool; each model file contains focused query functions for one resource. `Admin.js` handles all analytics and moderation queries.
 - **Views** — EJS templates rendered server-side. Post HTML content is sanitized with `sanitize-html` before being passed to the template.
 - **Controllers** — Business logic separated by domain: auth, pages, posts, users, interactions, admin.
 - **Routes** — URL mapping in `/routes`, separated by resource. Admin routes are double-guarded by `ensureAuthenticated` + `ensureAdmin`.
