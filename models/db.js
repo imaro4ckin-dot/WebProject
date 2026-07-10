@@ -1,28 +1,13 @@
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
-let pool;
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
 
-if (process.env.DATABASE_URL) {
-    // Local: use DATABASE_URL from .env
-    const url = new URL(process.env.DATABASE_URL);
-    pool = mysql.createPool({
-        host:     url.hostname,
-        port:     url.port,
-        user:     url.username,
-        password: url.password,
-        database: url.pathname.slice(1)
-    });
-} else {
-    // Railway: uses individual vars injected automatically
-    pool = mysql.createPool({
-        host:     process.env.MYSQLHOST,
-        port:     process.env.MYSQLPORT,
-        user:     process.env.MYSQLUSER,
-        password: process.env.MYSQLPASSWORD,
-        database: process.env.MYSQLDATABASE
-    });
-}
-
-module.exports = pool.promise();
+// Provide the same .query() interface the rest of the app uses
+module.exports = {
+    query: (text, params) => pool.query(text, params)
+};
