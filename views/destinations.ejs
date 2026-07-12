@@ -40,11 +40,12 @@
     <section class="container filter-bar" style="justify-content:center;" aria-label="Destination filters">
         <% const cats = ['all','Nature','City','Culture','Food','Adventure']; %>
         <% cats.forEach(function(cat) { %>
-            <a href="/destinations?category=<%= cat === 'all' ? '' : cat %><%= q ? '&q=' + encodeURIComponent(q) : '' %>"
+            <button
+               onclick="window.location='/destinations?category=<%= cat === 'all' ? '' : cat %><%= q ? '&q=' + encodeURIComponent(q) : '' %>'"
                class="filter-chip <%= category === cat ? 'active' : '' %>"
                aria-pressed="<%= category === cat ? 'true' : 'false' %>">
                 <%= cat === 'all' ? 'All trips' : cat %>
-            </a>
+            </button>
         <% }) %>
     </section>
 
@@ -73,9 +74,10 @@
                     <article class="card animate gallery-item" data-category="<%= post.category.toLowerCase() %>">
                         <% if (post.image) { %>
                             <div class="card-img">
-                                <img src="/Media/<%= post.image %>" alt="<%= post.title %>"
-                                     class="lightbox-trigger" style="cursor:pointer;"
-                                     tabindex="0" role="button" aria-label="Enlarge image">
+                                <button type="button" class="lightbox-btn" aria-label="Enlarge image: <%= post.title %>">
+                                    <img src="/Media/<%= post.image %>" alt="<%= post.title %>"
+                                         class="lightbox-trigger" style="cursor:pointer;">
+                                </button>
                             </div>
                         <% } else { %>
                             <div class="card-img"><span class="icon-slot" style="position:static; width:34px; height:34px; opacity:1; color:var(--accent);" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span></div>

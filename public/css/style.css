@@ -46,10 +46,10 @@
   --success-soft: #E7F3EA;
   --danger: #C4453A;
   --danger-soft: #FBE7E5;
-  --footer-bg: var(--charcoal);
-  --footer-text: #C9C4D1;
-  --footer-text-soft: #A9A3B3;
-  --footer-line: #4E4959;
+  --footer-bg: #F0EAE0;
+  --footer-text: #3A3542;
+  --footer-text-soft: #55505F;
+  --footer-line: #DDD5C8;
 
   --radius: 6px;
   --radius-lg: 10px;
@@ -209,7 +209,6 @@ header.site-header {
   align-items: center;
   border-bottom: 1px solid var(--border);
   position: relative;
-  overflow: hidden;
 }
 .logo {
   font-size: 13px;
@@ -365,6 +364,7 @@ nav a.active { color: var(--text); border-color: var(--accent); font-weight: 600
   overflow: hidden;
 }
 .card-img img { width: 100%; height: 100%; object-fit: cover; }
+.lightbox-btn { display: block; width: 100%; height: 100%; padding: 0; border: none; background: none; cursor: pointer; }
 .card-body { padding: 18px; }
 .card h3 { font-size: 18px; margin: 0 0 6px; font-weight: 600; }
 .card .byline { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin: 0 0 14px; }
@@ -778,7 +778,7 @@ footer.site-footer {
   flex-wrap: wrap;
   gap: 24px;
 }
-footer .logo-f { font-size: 12px; font-family: var(--font-pixel); color: #F2EFE8; }
+footer .logo-f { font-size: 12px; font-family: var(--font-pixel); color: var(--footer-text); }
 footer .logo-f span { color: var(--accent); }
 .footer-inner p { font-size: 13px; color: var(--footer-text-soft); max-width: 260px; line-height: 1.6; margin-top: 10px; }
 footer .cols { display: flex; gap: 56px; flex-wrap: wrap; }
@@ -1201,6 +1201,7 @@ nav a.active  { background-size: 100% 2px; color: var(--text); font-weight: 600;
     align-items: stretch;
     gap: 0;
     padding: 8px 20px 16px;
+    z-index: 100;
   }
   nav ul.is-open { display: flex; }
   nav li { width: 100%; }

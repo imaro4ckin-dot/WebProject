@@ -4,6 +4,8 @@ A full-stack travel blog platform for university students to share and discover 
 
 Developed as the final project for the **Web Engineering 2** course.
 
+**Live demo:** [pls-good-grade-we-tried.vercel.app](https://pls-good-grade-we-tried.vercel.app/)
+
 ---
 
 ## Features

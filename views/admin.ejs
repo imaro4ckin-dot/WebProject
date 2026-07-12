@@ -182,17 +182,18 @@
         <div class="admin-section-title">Top posts by views</div>
         <div class="article-panel" style="padding:0;">
             <div class="table-scroll">
-                <table class="admin-table">
+                <table class="admin-table" aria-label="Top posts by views">
+                    <caption class="visually-hidden">Top posts ranked by view count</caption>
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Category</th>
-                            <th>Views</th>
-                            <th>Likes</th>
-                            <th>Comments</th>
-                            <th>Published</th>
-                            <th></th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Views</th>
+                            <th scope="col">Likes</th>
+                            <th scope="col">Comments</th>
+                            <th scope="col">Published</th>
+                            <th scope="col"><span class="visually-hidden">Actions</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -233,12 +234,13 @@
         <section class="admin-section">
             <div class="admin-section-title">Most active writers</div>
             <div class="article-panel" style="padding:0;">
-                <table class="admin-table">
+                <table class="admin-table" aria-label="Most active writers">
+                    <caption class="visually-hidden">Top 5 authors ranked by post count</caption>
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Username</th>
-                            <th>Posts</th>
+                            <th scope="col">#</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Posts</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -266,13 +268,14 @@
             <div class="admin-section-title">Recent signups</div>
             <div class="article-panel" style="padding:0;">
                 <div class="table-scroll">
-                    <table class="admin-table">
+                    <table class="admin-table" aria-label="Recent signups">
+                        <caption class="visually-hidden">Latest 15 registered users with moderation controls</caption>
                         <thead>
                             <tr>
-                                <th>Username</th>
-                                <th>Joined</th>
-                                <th>Status</th>
-                                <th></th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Joined</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"><span class="visually-hidden">Actions</span></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -326,14 +329,15 @@
         <div class="admin-section-title">Recent comments</div>
         <div class="article-panel" style="padding:0;">
             <div class="table-scroll">
-                <table class="admin-table">
+                <table class="admin-table" aria-label="Recent comments">
+                    <caption class="visually-hidden">Latest 20 comments with delete controls</caption>
                     <thead>
                         <tr>
-                            <th>Comment</th>
-                            <th>Author</th>
-                            <th>Post</th>
-                            <th>Date</th>
-                            <th></th>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Post</th>
+                            <th scope="col">Date</th>
+                            <th scope="col"><span class="visually-hidden">Actions</span></th>
                         </tr>
                     </thead>
                     <tbody>
