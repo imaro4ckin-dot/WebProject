@@ -17,7 +17,8 @@ const getUserProfile = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
     const { id } = req.params;
-    if (req.user.id !== parseInt(id)) {
+    const userId = parseInt(id, 10);
+    if (isNaN(userId) || req.user.id !== userId) {
         return res.status(403).json({ error: "Not authorized to edit this profile." });
     }
     const { bio } = req.body;
@@ -33,7 +34,8 @@ const updateUserProfile = async (req, res) => {
 
 const getUserBookmarks = async (req, res) => {
     const { id } = req.params;
-    if (req.user.id !== parseInt(id)) {
+    const userId = parseInt(id, 10);
+    if (isNaN(userId) || req.user.id !== userId) {
         return res.status(403).json({ error: "Not authorized to view these bookmarks." });
     }
     try {

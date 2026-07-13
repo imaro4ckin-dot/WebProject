@@ -34,37 +34,41 @@ const dashboard = async (req, res) => {
 const deletePost = async (req, res) => {
     try {
         await Admin.deletePost(req.params.id);
+        res.redirect('/admin');
     } catch (err) {
         console.error('Admin deletePost error:', err);
+        res.status(500).send('Failed to delete post.');
     }
-    res.redirect('/admin');
 };
 
 const deleteComment = async (req, res) => {
     try {
         await Admin.deleteComment(req.params.id);
+        res.redirect('/admin#comments');
     } catch (err) {
         console.error('Admin deleteComment error:', err);
+        res.status(500).send('Failed to delete comment.');
     }
-    res.redirect('/admin#comments');
 };
 
 const banUser = async (req, res) => {
     try {
         await Admin.setBanned(req.params.id, true);
+        res.redirect('/admin#users');
     } catch (err) {
         console.error('Admin banUser error:', err);
+        res.status(500).send('Failed to ban user.');
     }
-    res.redirect('/admin#users');
 };
 
 const unbanUser = async (req, res) => {
     try {
         await Admin.setBanned(req.params.id, false);
+        res.redirect('/admin#users');
     } catch (err) {
         console.error('Admin unbanUser error:', err);
+        res.status(500).send('Failed to unban user.');
     }
-    res.redirect('/admin#users');
 };
 
 module.exports = { dashboard, deletePost, deleteComment, banUser, unbanUser };

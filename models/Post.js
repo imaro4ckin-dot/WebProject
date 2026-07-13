@@ -13,7 +13,7 @@ const getAll = async (category, q) => {
     const params = [];
     let i = 1;
     if (category) { sql += ` AND category = $${i++}`; params.push(category); }
-    if (q)        { sql += ` AND (title ILIKE $${i} OR content ILIKE $${i++})`; params.push(`%${q}%`); }
+    if (q)        { sql += ` AND (title ILIKE $${i} OR content ILIKE $${i})`; params.push(`%${q}%`); i++; }
     sql += ' ORDER BY posts.created_at DESC';
     const { rows } = await db.query(sql, params);
     return rows;
