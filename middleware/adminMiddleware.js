@@ -5,7 +5,7 @@ const ensureAdmin = (req, res, next) => {
     if (req.user.is_banned) {
         return res.redirect('/banned');
     }
-    if (req.user.is_admin === 1) {
+    if (req.user.is_admin) {
         return next();
     }
     // Logged-in but not an admin — show a clear 403 message
