@@ -2,9 +2,11 @@ const { createClient } = require('@supabase/supabase-js');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
+// Use the service role key for storage uploads — it bypasses RLS and is safe
+// to use here because this file only runs server-side, never in the browser.
 const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 const BUCKET = 'media';
