@@ -21,7 +21,7 @@
                 <li>
                     <a href="/users/<%= user.id %>" style="display:flex; align-items:center; gap:8px; text-decoration:none; border-bottom:none;">
                         <span class="avatar" style="width:32px; height:32px; font-size:11px;">
-                            <img src="/Media/<%= user.profile_pic || 'default.jpg' %>" alt="<%= user.username %>'s avatar">
+                            <img src="<%= imgUrl(user.profile_pic, '/Media/default.jpg') %>" alt="<%= user.username %>'s avatar">
                         </span>
                         <span style="font-weight:600; color:var(--text);"><%= user.username %></span>
                     </a>

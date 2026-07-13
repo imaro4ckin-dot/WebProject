@@ -17,7 +17,7 @@
 
     <section class="profile-header" style="border:1px solid var(--border); border-radius:var(--radius-lg); padding: var(--space-6); background: var(--surface);">
         <span class="avatar" style="width:128px; height:128px; border:4px solid var(--accent-soft);">
-            <img src="/Media/<%= profileUser.profile_pic || 'default.jpg' %>" alt="Profile picture of <%= profileUser.username %>">
+            <img src="<%= imgUrl(profileUser.profile_pic, '/Media/default.jpg') %>" alt="Profile picture of <%= profileUser.username %>">
         </span>
 
         <div class="profile-meta" style="flex:1;">
@@ -115,7 +115,7 @@
                 <% posts.forEach(function(post) { %>
                     <article class="card">
                         <% if (post.image) { %>
-                            <div class="card-img" style="height:130px;"><img src="/Media/<%= post.image %>" alt="<%= post.title %>"></div>
+                            <div class="card-img" style="height:130px;"><img src="<%= imgUrl(post.image) %>" alt="<%= post.title %>"></div>
                         <% } else { %>
                             <div class="card-img" style="height:130px;"><span class="icon-slot" style="position:static; width:28px; height:28px; opacity:1; color:var(--accent);" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span></div>
                         <% } %>

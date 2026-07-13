@@ -31,6 +31,12 @@ app.use(passport.session());
 app.use((req, res, next) => {
     res.locals.user = req.user || null;
     res.locals.baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+    // Resolves image values that may be a full URL (Supabase) or a legacy filename (/Media/...)
+    res.locals.imgUrl = (value, fallback = '') => {
+        if (!value) return fallback;
+        if (value.startsWith('http://') || value.startsWith('https://')) return value;
+        return '/Media/' + value;
+    };
     next();
 });
 

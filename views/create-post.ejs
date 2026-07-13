@@ -55,7 +55,7 @@
             <label for="image">Featured image <span style="color:var(--text-muted); font-weight:400; text-transform:none;">(optional)</span></label>
             <% if (typeof post !== 'undefined' && post.image) { %>
                 <div class="current-image-preview">
-                    <img src="/Media/<%= post.image %>" alt="Current featured image for <%= post.title %>">
+                    <img src="<%= imgUrl(post.image) %>" alt="Current featured image for <%= post.title %>">
                     <p>Upload a new image to replace this one.</p>
                 </div>
             <% } %>

@@ -23,7 +23,7 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
     const { title, content, category, tags } = req.body;
     const userId = req.user.id;
-    const image = req.file ? req.file.filename : null;
+    const image = req.fileUrl || null;
 
     if (!title || !content || !category) {
         return res.status(400).json({ error: "Title, content and category are required." });
@@ -58,7 +58,7 @@ const updatePost = async (req, res) => {
     const { title, content, category, tags } = req.body;
     const postId = req.params.id;
     const userId = req.user.id;
-    const image = req.file ? req.file.filename : null;
+    const image = req.fileUrl || null;
 
     if (!title || !content || !category) {
         return res.status(400).json({ error: "Title, content and category are required." });

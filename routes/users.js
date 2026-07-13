@@ -2,28 +2,25 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const { uploadFile } = require('../config/storage');
 const userController = require('../controllers/userController');
 const { ensureAuthenticated } = require('../middleware/authMiddleware');
 
-const uploadDir = path.join(__dirname, '../public/Media');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, uploadDir),
-    filename: (req, file, cb) => {
-        const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, 'avatar-' + unique + path.extname(file.originalname));
-    }
-});
-const upload = multer({ storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 const handleUpload = (req, res, next) => {
-    upload.single('profile_pic')(req, res, (err) => {
+    upload.single('profile_pic')(req, res, async (err) => {
         if (err) {
             return res.status(400).json({ error: 'Image upload failed: ' + err.message });
+        }
+        if (req.file) {
+            try {
+                const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                const filename = 'avatar-' + unique + path.extname(req.file.originalname);
+                req.fileUrl = await uploadFile(req.file.buffer, filename, req.file.mimetype);
+            } catch (uploadErr) {
+                return res.status(500).json({ error: uploadErr.message });
+            }
         }
         next();
     });

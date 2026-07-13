@@ -53,7 +53,7 @@
             <% posts.forEach(function(post, i) { %>
                 <article class="card animate" style="animation-delay: <%= i * 0.15 %>s">
                     <% if (post.image) { %>
-                        <div class="card-img"><img src="/Media/<%= post.image %>" alt="<%= post.title %>"></div>
+                        <div class="card-img"><img src="<%= imgUrl(post.image) %>" alt="<%= post.title %>"></div>
                     <% } else { %>
                         <div class="card-img"><span class="icon-slot" style="position:static; width:34px; height:34px; opacity:1; color:var(--accent);" aria-hidden="true"><svg viewBox="0 0 32 32"><use href="#icon-<%= categoryIcon(post.category) %>"></use></svg></span></div>
                     <% } %>

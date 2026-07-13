@@ -75,7 +75,7 @@
                         <% if (post.image) { %>
                             <div class="card-img">
                                 <button type="button" class="lightbox-btn" aria-label="Enlarge image: <%= post.title %>">
-                                    <img src="/Media/<%= post.image %>" alt="<%= post.title %>"
+                                    <img src="<%= imgUrl(post.image) %>" alt="<%= post.title %>"
                                          class="lightbox-trigger" style="cursor:pointer;">
                                 </button>
                             </div>

@@ -22,7 +22,7 @@ const updateUserProfile = async (req, res) => {
         return res.status(403).json({ error: "Not authorized to edit this profile." });
     }
     const { bio } = req.body;
-    const profile_pic = req.file ? req.file.filename : null;
+    const profile_pic = req.fileUrl || null;
     try {
         await User.updateProfile(id, bio, profile_pic);
         res.json({ message: "Profile updated successfully!" });
